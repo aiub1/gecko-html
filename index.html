@@ -1,95 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="style.css">
-    <title>Jumping Gecko</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="assets/logo.png">
+  <title>Jumping Gecko</title>
 </head>
 <body>
-    <div class="overlay">
-        <header>
-            <nav class="navbar-top">
-                <div class="hamburguer menu-btn">
-                    <span class="hamburguer container__image"><i class="fa-solid fa-bars"></i></span>
-                </div>
-                <ul class="navbar-top__list">
-                    <li id="nav-scroll" name="about" class="navbar-top__item"><a class="navbar__link">ABOUT</a></li>
-                    <li id="nav-scroll" name="play" class="navbar-top__item"><a class="navbar__link main_link">PLAY</a></li>
-                    <li  id="nav-scroll" name="gallery" class="navbar-top__item"><a class="navbar__link">GALLERY</a></li>
-                </ul>
-            </nav>    
-        </header>
-        <main>
-            <div id="play" class="main_section">
-                <div id="canvas_container" class="canvas-container">
-                    <canvas id="myCanvas"></canvas> 
-                </div>
-                <div id='playPrompt' " class="play_prompt">
-                    <img class="logo" src="./assets/logo.png" alt="" srcset="">
-                    <button id="playBtn" class="playBtn" role="button" target="_blank">
-                        <i class="fa-solid fa-gamepad"></i>
-                        PLAY
-                    </button>
-                </div>
+  <div class="overlay">
+    <header>
+      <nav class="navbar-top">
+        <div class="hamburguer menu-btn">
+          <span class="hamburguer container__image"><i class="fa-solid fa-bars"></i></span>
+        </div>
+        <ul class="navbar-top__list">
+          <li id="nav-scroll" name="about" class="navbar-top__item"><a class="navbar__link">ABOUT</a></li>
+          <li id="nav-scroll" name="play" class="navbar-top__item"><a class="navbar__link main_link">PLAY</a></li>
+          <li id="nav-scroll" name="gallery" class="navbar-top__item"><a class="navbar__link">GALLERY</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <div id="play" class="main_section">
+        <div id="canvas_container" class="canvas-container">
+          <canvas id="myCanvas"></canvas>
+        </div>
+        <div id='playPrompt' " class=" play_prompt">
+          <img class="logo" src="./assets/logo.png" alt="" srcset="">
+          <button id="playBtn" class="playBtn" role="button" target="_blank">
+            <i class="fa-solid fa-gamepad"></i>
+            PLAY
+          </button>
+        </div>
+      </div>
+      <div id="about" class="about">
+        <h1>Sobre</h1>
+        <p><strong>Jumping Gecko</strong> é um jogo de plataforma 2D upscrolling inspirado em títulos indie como Jump
+          King e Doodle Jump. Onde você assume o papel de um príncipe transformado em lagartixa por uma bruxa malvada.
+        </p>
+        <p>Sua missão é ajudar o Gecko a escalar cenários desafiadores, enfrentar obstáculos, superar a frustração e
+          alcançar a Maçã Divina para quebrar o feitiço. Com controles simples e uma jogabilidade viciante.</p>
+        <p>Durante a sua jornada, você mergulhará em uma aventura cheia de mistério e magia, explorando incríveis
+          paisagens e desvendando segredos enquanto enfrenta criaturas malignas!</p>
+      </div>
+      <div class="gallery_container">
+        <h2 class="gallery__title">Galeria</h2>
+        <div class="photo-gallery">
+          <div class="column">
+            <div class="photo">
+              <img id="gallery" src="./assets/gallery/_fb8ee4ff-46be-4a2d-ba1f-6666c09338c9.jpeg" alt="">
             </div>
-
-            <div id="about" class="about">
-                    <h1>Sobre</h1>
-                    <p><strong>Jumping Gecko</strong> é um jogo de plataforma 2D upscrolling inspirado em títulos indie como Jump King e Doodle Jump. Onde você assume o papel de um príncipe transformado em lagartixa por uma bruxa malvada. </p>
-                    <p>Sua missão é ajudar o Gecko a escalar cenários desafiadores, enfrentar obstáculos, superar a frustração e alcançar a Maçã Divina para quebrar o feitiço. Com controles simples e uma jogabilidade viciante.</p>
-                    <p>Durante a sua jornada, você mergulhará em uma aventura cheia de mistério e magia, explorando incríveis paisagens e desvendando segredos enquanto enfrenta criaturas malignas!</p>
+            <div class="photo">
+              <img src="./assets/gallery/_c2bb9e31-8cec-4712-821b-7ccb9cf63b98.jpg" alt="">
             </div>
-
-            <div class="gallery_container">
-                <h2 class="gallery__title">Galeria</h2>
-
-                <div class="photo-gallery">
-                    <div class="column">
-                        <div class="photo">
-                            <img id="gallery" src="./assets/gallery/_fb8ee4ff-46be-4a2d-ba1f-6666c09338c9.jpeg" alt="">
-                        </div>
-                        <div class="photo">
-                            <img src="./assets/gallery/_c2bb9e31-8cec-4712-821b-7ccb9cf63b98.jpg" alt="">
-                        </div>
-                        <div class="column">
-                            <div class="photo">
-                                <img src="./assets/gallery/_c7cae741-199d-4216-b56f-3dc71cca7a75.jpg" alt="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="photo">
-                            <img src="./assets/gallery/_1f2fc8bd-236a-4ba6-8fee-aa0813b66e90.jpg" alt="">
-                        </div>
-                        <div class="photo">
-                            <img src="./assets/gallery/_b2c1aa1b-9993-40af-be36-2b2b0ea10dc5.jpg" alt="">
-                        </div>
-                        <div class="column">
-                            <div class="photo">
-                                <img src="./assets/gallery/_c46f13ae-f2ad-4935-89ea-115ae4f00e3b.jpg" alt="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="photo">
-                            <img src="./assets/gallery/_f22e5c55-447e-442d-88dd-a06c7adfea64.jpg" alt="">
-                        </div>
-                        <div class="photo">
-                            <img src="./assets/gallery/_40713be2-2a8e-4816-9370-e89ee20076f6.jpg" alt="">
-                        </div>
-                        <div class="column">
-                            <div class="photo">
-                                <img src="./assets/gallery/_63d000c5-6462-4ff6-bd21-b703f8ee4f1f.jpeg" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="column">
+              <div class="photo">
+                <img src="./assets/gallery/_c7cae741-199d-4216-b56f-3dc71cca7a75.jpg" alt="">
+              </div>
             </div>
-        </main>
-        
-    </div>
+          </div>
+          <div class="column">
+            <div class="photo">
+              <img src="./assets/gallery/_1f2fc8bd-236a-4ba6-8fee-aa0813b66e90.jpg" alt="">
+            </div>
+            <div class="photo">
+              <img src="./assets/gallery/_b2c1aa1b-9993-40af-be36-2b2b0ea10dc5.jpg" alt="">
+            </div>
+            <div class="column">
+              <div class="photo">
+                <img src="./assets/gallery/_c46f13ae-f2ad-4935-89ea-115ae4f00e3b.jpg" alt="">
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="photo">
+              <img src="./assets/gallery/_f22e5c55-447e-442d-88dd-a06c7adfea64.jpg" alt="">
+            </div>
+            <div class="photo">
+              <img src="./assets/gallery/_40713be2-2a8e-4816-9370-e89ee20076f6.jpg" alt="">
+            </div>
+            <div class="column">
+              <div class="photo">
+                <img src="./assets/gallery/_63d000c5-6462-4ff6-bd21-b703f8ee4f1f.jpeg" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 </body>
 <script src="./index.js"></script>
 </html>
