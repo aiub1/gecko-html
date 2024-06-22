@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +29,7 @@
         <div id="canvas_container" class="canvas-container">
           <canvas id="myCanvas"></canvas>
         </div>
-        <div id='playPrompt' " class=" play_prompt">
+        <div id='playPrompt' class="play_prompt">
           <img class="logo" src="./assets/logo.png" alt="" srcset="">
           <button id="playBtn" class="playBtn" role="button" target="_blank">
             <i class="fa-solid fa-gamepad"></i>
@@ -38,6 +37,7 @@
           </button>
         </div>
       </div>
+
       <div id="about" class="about">
         <h1>Sobre</h1>
         <p><strong>Jumping Gecko</strong> é um jogo de plataforma 2D upscrolling inspirado em títulos indie como Jump
@@ -48,8 +48,10 @@
         <p>Durante a sua jornada, você mergulhará em uma aventura cheia de mistério e magia, explorando incríveis
           paisagens e desvendando segredos enquanto enfrenta criaturas malignas!</p>
       </div>
+
       <div class="gallery_container">
         <h2 class="gallery__title">Galeria</h2>
+
         <div class="photo-gallery">
           <div class="column">
             <div class="photo">
@@ -95,5 +97,11 @@
     </main>
   </div>
 </body>
+<script src="./js/utils.js"></script>
+<script src="./js/classes/CollisionBlock.js"></script>
+<script src="./js/classes/Sprite.js"></script>
+<script src="./js/classes/Player.js"></script>
+<script src="./js/classes/IntensityBar.js"></script>
+<script src="./js/data/collisions.js"></script>
 <script src="./index.js"></script>
 </html>
