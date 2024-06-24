@@ -10,24 +10,31 @@ GAME TODO 🕹️:
   ✔ Collisions for canvas limit @done(24-06-19 23:06)
   ✔ Vertical/Horizontal Camera Paning @done(24-06-19 23:06)
   ✔ Draw Intensity bar @done(24-06-21 00:58)
-  ☐ Finish jumping and bouncing mechanics
-  ☐ Swap to real sprites
+  ✔ Finish jumping and bouncing mechanics @done(24-06-23 20:15)
+  ✔ Swap to real sprites @done(24-06-24 00:32)
   ☐ Menu Screen
   ☐ Design Levels
   ☐ Make Instructions screen
   ☐ "Finish Line" (Collectable) and end game screen 
-  ☐ Code Refactor
-  ☐ Overrall Polish
+  
+  BONUS FEATURES 👽: 
+    ☐ Overrall Polish
+    ☐ Code Refactor
+    ☐ Add moving plataforms
+    ☐ Lock FPS for perfomance and game consistence
+    ☐ Add Sound effects and music
+    ☐ Make it responsive
+    ☐ Add Splash Screens
+    
+  NÃO VAI DAR NEM FUDENDO... 💀:
+    ☐ Add enemies and environmental threats 
+    ☐ Make it playable on mobile devices
+    ☐ Fullscreen / Scaled mode
 
-BONUS FEATURES 👽: 
-  ☐ Add moving plataforms
-  ☐ Lock FPS for perfomance and game consistence
-  ☐ Add Sound effects and music
-  ☐ Make it responsive
-  ☐ Add Splash Screens
-
-NÃO VAI DAR NEM FUDENDO... 💀:
-  ☐ Add enemies and environmental threats 
-  ☐ Make it playable on mobile devices
-  ☐ Fullscreen / Scaled mode
-
+  BUG LIST:
+    ✔ X-veloxity is not reseted when player jumps on top of plataforms @done(24-06-24 09:40)
+    ✔ Player freezes mid-air when the y-axis velocity hits 0 @done(24-06-24 09:40)
+    ✔ Player freezes when on top of plataforms @done(24-06-24 09:39)
+    ✔ Hitbox glitching when player hits the side of a plataform @done(24-06-24 09:41)
+    ☐ X velocity randomly turns to 0 after bouncing
+    ☐ random A and D delay when standing on plataforms

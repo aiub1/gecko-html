@@ -30,6 +30,7 @@ class Player extends Sprite {
     };
 
     this.floorCollisionDetected = false;
+    this.plataformCollisionDetected = false;
     this.wallCollisionDetected = false;
     this.lastDirection = "right";
     this.playerHasJumped = false;
@@ -113,7 +114,7 @@ class Player extends Sprite {
     const cameraBoxBottom = this.cameraBox.position.y + this.cameraBox.height;
     const scaledCanvasHeight = canvas.height / 4;
 
-    if (cameraBoxBottom + this.velocity.y >=  432) return;
+    if (cameraBoxBottom + this.velocity.y >= 432) return;
 
     if (cameraBoxBottom >= Math.abs(camera.position.y) + scaledCanvasHeight) {
       camera.position.y -= this.velocity.y;
@@ -159,17 +160,17 @@ class Player extends Sprite {
     this.updateLastDirection();
     this.checkForFloorCollisions();
     // console.log(this.velocity.y);
-  }
+  }a
 
   // UPDATES THE HITBOX POSITION TO FOLLOW THE PLAYER
   updateHitbox() {
     this.hitbox = {
       position: {
-        x: this.position.x + 32,
-        y: this.position.y + 26,
+        x: this.position.x + 35.5,
+        y: this.position.y + 38,
       },
-      width: 16,
-      height: 27,
+      width: 12,
+      height: 15,
     };
   }
 
@@ -286,17 +287,17 @@ class Player extends Sprite {
 
           const offset =
             this.hitbox.position.y - this.position.y + this.hitbox.height;
-
           this.position.y = collisionBlock.position.y - offset - 0.01;
         }
 
         if (this.velocity.y < 0) {
+          this.floorCollisionDetected = true;
+          this.playerHasJumped = false;
           this.velocity.y = 0;
 
           const offset = this.hitbox.position.y - this.position.y;
-
           this.position.y =
-            collisionBlock.position.y + collisionBlock.height - offset + 0.01;
+            collisionBlock.position.y + collisionBlock.height - offset + 0.05;
         }
       }
     }
@@ -313,9 +314,12 @@ class Player extends Sprite {
       ) {
         if (this.velocity.y > 0) {
           this.floorCollisionDetected = true;
+          this.plataformCollisionDetected = true;
           this.playerHasJumped = false;
           this.velocity.y = 0;
 
+          console.log("teste");
+          this.plataformCollisionDetected = true;
           const offset =
             this.hitbox.position.y - this.position.y + this.hitbox.height;
 
@@ -323,6 +327,8 @@ class Player extends Sprite {
         }
 
         if (this.velocity.y < 0) {
+          this.floorCollisionDetected = true;
+          this.playerHasJumped = false;
           this.velocity.y = 0;
 
           const offset = this.hitbox.position.y - this.position.y;
@@ -366,7 +372,6 @@ class Player extends Sprite {
           ) {
             this.floorCollisionDetected = true;
             this.playerHasJumped = false;
-            console.log("TESTE")
           } else {
             this.floorCollisionDetected = false;
           }

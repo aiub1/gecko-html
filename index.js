@@ -1,9 +1,38 @@
-/////////////// Canvas Config /////////////
+/////////////// HTML CONFIG /////////////
 const playBtn = document.getElementById("playBtn");
 const playPrompt = document.getElementById("playPrompt");
 const navButtons = document.querySelectorAll("#nav-scroll");
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
+
+playBtn.addEventListener("click", () => {
+  playPrompt.style.display = "none";
+  canvas.style.display = "block";
+  canvas.classList.add = "active";
+});
+
+const scrollToElem = (element) => {
+  element.scrollIntoView({
+    behavior: "smooth",
+    block: "center",
+    inline: "nearest",
+  });
+};
+
+navButtons.forEach((button) => {
+  const name = button.getAttribute("name");
+  const scrollTo = document.getElementById(name);
+  button.addEventListener("click", () => scrollToElem(scrollTo));
+});
+
+if (canvas.classList.contains("active")) {
+  document.querySelector("body").height = "500";
+  window.onscroll = function () {
+    window.scrollTo(canvas);
+  };
+}
+
+/////////////// CANVAS CONFIG /////////////
 
 canvas.width = 1024;
 canvas.height = 576;
@@ -12,22 +41,6 @@ const scaledCanvas = {
   width: canvas.height / 4,
   height: canvas.height / 4,
 };
-
-playBtn.addEventListener('click', () => {
-  playPrompt.style.display = 'none';
-  canvas.style.display = 'block';
-})
-
-
-const scrollToElem = (element) => {
-  element.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
-}
-
-navButtons.forEach(button => {
-  const name = button.getAttribute("name");
-  const scrollTo = document.getElementById(name);
-  button.addEventListener('click', () => scrollToElem(scrollTo))
-});
 
 /////////////// DEFINE COLLISION BLOCKS ///////////////////
 
@@ -60,6 +73,7 @@ plataformCollisions2D.forEach((row, y) => {
   });
 });
 
+
 floorCollisions2D.forEach((row, y) => {
   row.forEach((symbol, x) => {
     if (symbol === 202) {
@@ -78,6 +92,10 @@ floorCollisions2D.forEach((row, y) => {
 ////////////////// OVERALL CONFIGURATIONS //////////////////
 
 const gravity = 0.2;
+let intensity = 0;
+let lastIntetensity = 0;
+let counting = false;
+let timer = null;
 
 const player = new Player({
   canvas,
@@ -87,28 +105,28 @@ const player = new Player({
   },
   collisionBlocks,
   plataformCollisionBlocks,
-  imageSrc: "./assets/sprites/player/Idle.png",
+  imageSrc: "./assets/sprites/player/Idle2.png",
   frameRate: 8,
   animations: {
     Idle: {
-      imageSrc: "./assets/sprites/player/Idle.png",
+      imageSrc: "./assets/sprites/player/Idle2.png",
       frameRate: 8,
-      frameBuffer: 5,
+      frameBuffer: 9,
     },
     IdleLeft: {
       imageSrc: "./assets/sprites/player/IdleLeft.png",
       frameRate: 8,
-      frameBuffer: 5,
+      frameBuffer: 9,
     },
     Run: {
-      imageSrc: "./assets/sprites/player/Run.png",
+      imageSrc: "./assets/sprites/player/Run2.png",
       frameRate: 8,
-      frameBuffer: 5,
+      frameBuffer: 3,
     },
     RunLeft: {
       imageSrc: "./assets/sprites/player/RunLeft.png",
       frameRate: 8,
-      frameBuffer: 5,
+      frameBuffer: 3,
     },
     Jump: {
       imageSrc: "./assets/sprites/player/Jump.png",
@@ -196,22 +214,19 @@ function render() {
 
   player.update();
 
-  
   // If the a direction key is being pressed and the player is on the ground moves the player to the direction
   if (
-    keys.KeyA.pressed &&
+    keys.KeyA.pressed || player.velocity.x < 0  &&
     !(player.velocity.y < 0) &&
-    player.floorCollisionDetected
-    // && player.floorCollisionDetected
+    (player.floorCollisionDetected || player.plataformCollisionBlocks)
   ) {
     player.switchSprite("RunLeft");
     player.velocity.x = -2;
     player.PanCameraToTheRight({ canvas, camera }); ///////////////////////////////////// MOVE IT ////////////////////////////////////////
   } else if (
-    keys.KeyD.pressed &&
+    keys.KeyD.pressed || player.velocity.x > 0 &&
     !(player.velocity.y < 0) &&
-    player.floorCollisionDetected
-    // && player.floorCollisionDetected
+    (player.floorCollisionDetected || player.plataformCollisionBlocks)
   ) {
     player.switchSprite("Run");
     player.velocity.x = 2;
@@ -222,39 +237,6 @@ function render() {
     player.switchSprite("Idle");
   }
 
-  // Condition to make the player jump left when "A" was last pressed
-  if (player.velocity.y < 0 && keys.KeyA.lastPressed === true && !counting)
-    player.velocity.x = -3;
-
-  // Condition to make the player jump right when "D" was last pressed
-  if (player.velocity.y < 0 && keys.KeyD.lastPressed === true)
-    player.velocity.x = 3;
-
-  // Condition to make the player jump up when "W" was last pressed
-  if (
-    player.velocity.y < 0 &&
-    keys.KeyW.lastPressed === true &&
-    !player.checkForFloorCollisions()
-  )
-    player.velocity.x = 0;
-
-  if (
-    !keys.KeyA.pressed &&
-    !keys.KeyD.pressed &&
-    player.floorCollisionDetected
-  ) {
-    player.velocity.x = 0;
-  }
-
-  if (keys.Space.pressed) {
-    player.velocity.x = 0;
-    intensityBar.drawBar();
-  }
-
-  // Bouncing off the walls mechanic
-  // if (player.wallCollisionDetected & !player.floorCollisionDetected) {
-  //   player.velocity.x = 5;
-  // }
   if (player.velocity.y < 0) {
     player.PanCameraDown({ canvas, camera });
     if (player.lastDirection === "right") player.switchSprite("Jump");
@@ -265,6 +247,53 @@ function render() {
     else player.switchSprite("FallLeft");
   }
 
+
+  // Condition to make the player jump left when "A" was last pressed
+  if (player.playerHasJumped && keys.KeyA.lastPressed === true)
+    player.velocity.x = -2;
+
+  // Condition to make the player jump right when "D" was last pressed
+  if (player.playerHasJumped && keys.KeyD.lastPressed === true)
+    player.velocity.x = 2;
+
+  // Condition to make the player jump up when "W" was last pressed
+
+  if (player.floorCollisionDetected) {
+    if (!keys.KeyA.pressed && !keys.KeyD.pressed) {
+      player.velocity.y = 0;
+      player.velocity.x = 0;
+    }
+  }
+
+  if (player.plataformCollisionDetected) {
+    if (!keys.KeyA.pressed && !keys.KeyD.pressed) {
+      player.velocity.y = 0;
+      player.velocity.x = 0;
+      player.playerHasJumped = false;
+      player.plataformCollisionDetected = false;
+      player.floorCollisionDetected = true; 
+    }
+  }
+
+  if (!player.floorCollisionDetected) {
+    player.plataformCollisionDetected = false;
+  }
+
+  console.log(player.plataformCollisionDetected);
+
+  if (keys.Space.pressed) {
+    player.velocity.x = 0;
+    intensityBar.drawBar();
+  }
+
+  // Bouncing off the walls mechanic
+  if (player.wallCollisionDetected && !player.floorCollisionDetected) {
+    player.velocity.x = player.velocity.x * -1;
+    player.velocity.y = lastIntetensity / 1.5;
+    keys.KeyA.lastPressed = false;
+    keys.KeyD.lastPressed = false;
+  }
+
   c.restore();
 }
 
@@ -272,9 +301,6 @@ render();
 
 /////////////////////// JUMP MECHANIC /////////////////////////
 
-let intensity = 0;
-let counting = false;
-let timer = null;
 
 function increaseIntensity() {
   if (counting) {
@@ -290,7 +316,8 @@ function jumpCoreMechanic() {
   counting = false;
   player.velocity.y = intensity;
   player.playerHasJumped = true;
-  intensity = 0;
+  lastIntetensity = intensity;
+  if (player.floorCollisionDetected) intensity = 0;
   intensityBar.width = 0;
 }
 
@@ -298,6 +325,7 @@ function jumpCoreMechanic() {
 
 window.addEventListener("keydown", (event) => {
   if (!player.playerHasJumped)
+    if(player.floorCollisionDetected)
     switch (event.code) {
       case "KeyA":
         keys.KeyA.pressed = true;
@@ -335,11 +363,11 @@ window.addEventListener("keyup", (event) => {
   switch (event.code) {
     case "KeyA":
       keys.KeyA.pressed = false;
-      player.velocity.x = 0;
+      if (player.velocity.y >= 0 ) player.velocity.x = 0;
       break;
     case "KeyD":
       keys.KeyD.pressed = false;
-      player.velocity.x = 0;
+      if (player.velocity.y >= 0 ) player.velocity.x = 0;
       break;
     case "Space":
       keys.Space.pressed = false;

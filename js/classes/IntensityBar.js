@@ -15,11 +15,6 @@ class IntensityBar {
 
   drawBar() {
     this.updateIntensityBar();
-    console.log(
-      `Position X: ${this.position.x}, Position Y: ${
-        this.position.y
-      }, Width: ${Math.abs(this.width)}`
-    );
     c.fillStyle = "rgb(0, 255, 0)";
     c.fillRect(
       this.position.x,
