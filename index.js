@@ -13,6 +13,7 @@ const scrollToElem = (element, position) => {
   });
 };
 
+// TODO: UNFREEZE PAGE SCROLLING WHEN THE PLAYER QUITS THE GAME
 playBtn.addEventListener("click", () => {
   window.scrollToElem = (playBtn, "start");
   playPrompt.style.display = "none";

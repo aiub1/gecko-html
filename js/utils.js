@@ -1,9 +1,9 @@
 ///////////////// GLOBAL VARIABLES //////////////////
-
 var canvas = document.querySelector("canvas"); 
 var c = canvas.getContext("2d"); 
 var gameStarted = false;
 var gravity = 0.2;
+
 
 
 //////////////// UTILITY FUNCTIONS /////////////////
