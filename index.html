@@ -11,9 +11,9 @@
   <title>Jumping Gecko</title>
 </head>
 <body>
-  <div class="overlay">
+  <div id="overlay" class="overlay">
     <header>
-      <nav class="navbar-top">
+      <nav id="navbar" class="navbar-top">
         <div class="hamburguer menu-btn">
           <span class="hamburguer container__image"><i class="fa-solid fa-bars"></i></span>
         </div>
@@ -24,7 +24,7 @@
         </ul>
       </nav>
     </header>
-    <main>
+    <main id="main">
       <div id="play" class="main_section">
         <div id="canvas_container" class="canvas-container">
           <canvas id="myCanvas"></canvas>
@@ -100,8 +100,9 @@
 <script src="./js/utils.js"></script>
 <script src="./js/classes/CollisionBlock.js"></script>
 <script src="./js/classes/Sprite.js"></script>
+<script type="module" src="./js/menu.js"></script>
 <script src="./js/classes/Player.js"></script>
 <script src="./js/classes/IntensityBar.js"></script>
 <script src="./js/data/collisions.js"></script>
-<script src="./index.js"></script>
+<script type="module" src="./index.js"></script>
 </html>

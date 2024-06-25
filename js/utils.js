@@ -1,5 +1,14 @@
-// conditions to determine if two objects are colliding ( ex.: object1 = player ; object2 = collisionBlock)
+///////////////// GLOBAL VARIABLES //////////////////
 
+var canvas = document.querySelector("canvas"); 
+var c = canvas.getContext("2d"); 
+var gameStarted = false;
+var gravity = 0.2;
+
+
+//////////////// UTILITY FUNCTIONS /////////////////
+
+// conditions to determine if two objects are colliding ( ex.: object1 = player ; object2 = collisionBlock)
 function collision({ object1, object2, canvas }) {
   return (
     // floor collision

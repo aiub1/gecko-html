@@ -90,8 +90,6 @@ floorCollisions2D.forEach((row, y) => {
 });
 
 ////////////////// OVERALL CONFIGURATIONS //////////////////
-
-const gravity = 0.2;
 let intensity = 0;
 let lastIntetensity = 0;
 let counting = false;
@@ -187,6 +185,7 @@ const keys = {
 
 ///////////////////////// MAIN RENDERER ///////////////////////////
 
+
 const backgroundImageHeight = 432;
 
 const camera = {
@@ -198,6 +197,9 @@ const camera = {
 
 function render() {
   window.requestAnimationFrame(render);
+
+  if(!gameStarted) return
+
   c.fillStyle = "white";
   c.fillRect(0, 0, canvas.width, canvas.height);
 
