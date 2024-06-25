@@ -12,7 +12,7 @@ GAME TODO 🕹️:
   ✔ Draw Intensity bar @done(24-06-21 00:58)
   ✔ Finish jumping and bouncing mechanics @done(24-06-23 20:15)
   ✔ Swap to real sprites @done(24-06-24 00:32)
-  ☐ Menu Screen
+  ✔ Menu Screen @done(24-06-25 00:42)
   ☐ Design Levels
   ☐ Make Instructions screen
   ☐ "Finish Line" (Collectable) and end game screen 
@@ -36,5 +36,6 @@ GAME TODO 🕹️:
     ✔ Player freezes mid-air when the y-axis velocity hits 0 @done(24-06-24 09:40)
     ✔ Player freezes when on top of plataforms @done(24-06-24 09:39)
     ✔ Hitbox glitching when player hits the side of a plataform @done(24-06-24 09:41)
+    ✔ Page scrolls down when space is pressed @done(24-06-25 00:43)
     ☐ X velocity randomly turns to 0 after bouncing
     ☐ random A and D delay when standing on plataforms

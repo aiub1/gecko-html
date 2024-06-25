@@ -184,12 +184,14 @@ function menuLoop() {
 }
 
 // Ensure the background image is loaded before starting the game loop
-background.image.onload = () => {
-  console.log("Background image loaded");
-  background.loaded = true;
-  background.update();
-  menuLoop();
-};
+window.addEventListener("DOMContentLoaded", () => {
+  background.image.onload = () => {
+    console.log("Background image loaded");
+    background.loaded = true;
+    background.update();
+    menuLoop();
+  };
+});
 
 background.image.onerror = () => {
   console.error("Failed to load background image");

@@ -8,8 +8,8 @@ class IntensityBar {
 
   updateIntensityBar() {
     this.position = {
-      x: this.player.position.x + 30,
-      y: this.player.position.y + 20,
+      x: this.player.position.x + 32,
+      y: this.player.position.y + 30,
     };
   }
 
