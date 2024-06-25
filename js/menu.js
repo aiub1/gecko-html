@@ -1,4 +1,4 @@
-const background = new Sprite({
+const menuBg = new Sprite({
   position: {
     x: 0,
     y: 0,
@@ -81,13 +81,13 @@ function drawButton(button, hover = false) {
 
 function drawMenu() {
   c.clearRect(0, 0, canvas.width, canvas.height);
-  if (background.loaded) {
-    background.update();
+  if (menuBg.loaded) {
+    menuBg.update();
     startBtn.update();
     controlsBtn.update();
     quitBtn.update();
   } else {
-    console.log("Background not loaded yet");
+    console.log("menuBg not loaded yet");
   }
   buttons.forEach((button) => drawButton(button));
 }
@@ -177,22 +177,19 @@ canvas.addEventListener("mouseup", (e) => {
 
 function menuLoop() {
   if (!gameStarted) {
-    background.updateImage("./assets/ui/menu1.png");
     drawMenu();
-    requestAnimationFrame(menuLoop);
+    window.requestAnimationFrame(menuLoop);
   }
 }
 
-// Ensure the background image is loaded before starting the game loop
+// Ensure the menuBg image is loaded before starting the game loop
 window.addEventListener("DOMContentLoaded", () => {
-  background.image.onload = () => {
-    console.log("Background image loaded");
-    background.loaded = true;
-    background.update();
-    menuLoop();
+  window.onload = () => {
+    console.log("menuBg image loaded");
+    if (menuBg.loaded = true) menuLoop();
   };
 });
 
-background.image.onerror = () => {
-  console.error("Failed to load background image");
+menuBg.image.onerror = () => {
+  console.error("Failed to load menuBg image");
 };
