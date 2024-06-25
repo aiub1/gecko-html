@@ -1,36 +1,33 @@
 /////////////// HTML CONFIG /////////////
+const main = document.getElementById("main");
+const overlay = document.getElementById("overlay");
 const playBtn = document.getElementById("playBtn");
 const playPrompt = document.getElementById("playPrompt");
 const navButtons = document.querySelectorAll("#nav-scroll");
-const canvas = document.querySelector("canvas");
-const c = canvas.getContext("2d");
 
-playBtn.addEventListener("click", () => {
-  playPrompt.style.display = "none";
-  canvas.style.display = "block";
-  canvas.classList.add = "active";
-});
-
-const scrollToElem = (element) => {
+const scrollToElem = (element, position) => {
   element.scrollIntoView({
     behavior: "smooth",
-    block: "center",
+    block: position,
     inline: "nearest",
   });
 };
 
+playBtn.addEventListener("click", () => {
+  window.scrollToElem = (playBtn, "start");
+  playPrompt.style.display = "none";
+  canvas.style.display = "block";
+  canvas.classList.add("active");
+  overlay.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
+  main.style.height = "100%";
+  main.style.overflow = "hidden";
+});
+
 navButtons.forEach((button) => {
   const name = button.getAttribute("name");
   const scrollTo = document.getElementById(name);
-  button.addEventListener("click", () => scrollToElem(scrollTo));
+  button.addEventListener("click", () => scrollToElem(scrollTo, "center"));
 });
-
-if (canvas.classList.contains("active")) {
-  document.querySelector("body").height = "500";
-  window.onscroll = function () {
-    window.scrollTo(canvas);
-  };
-}
 
 /////////////// CANVAS CONFIG /////////////
 
@@ -72,7 +69,6 @@ plataformCollisions2D.forEach((row, y) => {
     }
   });
 });
-
 
 floorCollisions2D.forEach((row, y) => {
   row.forEach((symbol, x) => {
@@ -185,7 +181,6 @@ const keys = {
 
 ///////////////////////// MAIN RENDERER ///////////////////////////
 
-
 const backgroundImageHeight = 432;
 
 const camera = {
@@ -198,7 +193,7 @@ const camera = {
 function render() {
   window.requestAnimationFrame(render);
 
-  if(!gameStarted) return
+  if (!gameStarted) return;
 
   c.fillStyle = "white";
   c.fillRect(0, 0, canvas.width, canvas.height);
@@ -218,17 +213,19 @@ function render() {
 
   // If the a direction key is being pressed and the player is on the ground moves the player to the direction
   if (
-    keys.KeyA.pressed || player.velocity.x < 0  &&
-    !(player.velocity.y < 0) &&
-    (player.floorCollisionDetected || player.plataformCollisionBlocks)
+    keys.KeyA.pressed ||
+    (player.velocity.x < 0 &&
+      !(player.velocity.y < 0) &&
+      (player.floorCollisionDetected || player.plataformCollisionBlocks))
   ) {
     player.switchSprite("RunLeft");
     player.velocity.x = -2;
     player.PanCameraToTheRight({ canvas, camera }); ///////////////////////////////////// MOVE IT ////////////////////////////////////////
   } else if (
-    keys.KeyD.pressed || player.velocity.x > 0 &&
-    !(player.velocity.y < 0) &&
-    (player.floorCollisionDetected || player.plataformCollisionBlocks)
+    keys.KeyD.pressed ||
+    (player.velocity.x > 0 &&
+      !(player.velocity.y < 0) &&
+      (player.floorCollisionDetected || player.plataformCollisionBlocks))
   ) {
     player.switchSprite("Run");
     player.velocity.x = 2;
@@ -248,7 +245,6 @@ function render() {
     if (player.lastDirection === "right") player.switchSprite("Fall");
     else player.switchSprite("FallLeft");
   }
-
 
   // Condition to make the player jump left when "A" was last pressed
   if (player.playerHasJumped && keys.KeyA.lastPressed === true)
@@ -273,7 +269,7 @@ function render() {
       player.velocity.x = 0;
       player.playerHasJumped = false;
       player.plataformCollisionDetected = false;
-      player.floorCollisionDetected = true; 
+      player.floorCollisionDetected = true;
     }
   }
 
@@ -303,7 +299,6 @@ render();
 
 /////////////////////// JUMP MECHANIC /////////////////////////
 
-
 function increaseIntensity() {
   if (counting) {
     if (intensity == -10) intensity = 0;
@@ -327,49 +322,49 @@ function jumpCoreMechanic() {
 
 window.addEventListener("keydown", (event) => {
   if (!player.playerHasJumped)
-    if(player.floorCollisionDetected)
-    switch (event.code) {
-      case "KeyA":
-        keys.KeyA.pressed = true;
-        keys.KeyW.lastPressed = false;
-        keys.KeyA.lastPressed = true;
-        keys.KeyD.lastPressed = false;
-        break;
-      case "KeyD":
-        keys.KeyD.pressed = true;
-        keys.KeyW.lastPressed = false;
-        keys.KeyD.lastPressed = true;
-        keys.KeyA.lastPressed = false;
-        break;
-      case "KeyW":
-        keys.KeyW.lastPressed = true;
-        keys.KeyA.pressed = false;
-        keys.KeyD.pressed = false;
-        break;
-      case "Space":
-        if (player.velocity.y === 0 && !counting) {
-          player.velocity.x = 0;
-          keys.KeyA.pressed = false;
-          {
-            keys.KeyD.pressed = false;
-            keys.Space.pressed = true;
-            counting = true;
-            increaseIntensity();
-          }
+    if (player.floorCollisionDetected)
+      switch (event.code) {
+        case "KeyA":
+          keys.KeyA.pressed = true;
+          keys.KeyW.lastPressed = false;
+          keys.KeyA.lastPressed = true;
+          keys.KeyD.lastPressed = false;
           break;
-        }
-    }
+        case "KeyD":
+          keys.KeyD.pressed = true;
+          keys.KeyW.lastPressed = false;
+          keys.KeyD.lastPressed = true;
+          keys.KeyA.lastPressed = false;
+          break;
+        case "KeyW":
+          keys.KeyW.lastPressed = true;
+          keys.KeyA.pressed = false;
+          keys.KeyD.pressed = false;
+          break;
+        case "Space":
+          if (player.velocity.y === 0 && !counting) {
+            player.velocity.x = 0;
+            keys.KeyA.pressed = false;
+            {
+              keys.KeyD.pressed = false;
+              keys.Space.pressed = true;
+              counting = true;
+              increaseIntensity();
+            }
+            break;
+          }
+      }
 });
 
 window.addEventListener("keyup", (event) => {
   switch (event.code) {
     case "KeyA":
       keys.KeyA.pressed = false;
-      if (player.velocity.y >= 0 ) player.velocity.x = 0;
+      if (player.velocity.y >= 0) player.velocity.x = 0;
       break;
     case "KeyD":
       keys.KeyD.pressed = false;
-      if (player.velocity.y >= 0 ) player.velocity.x = 0;
+      if (player.velocity.y >= 0) player.velocity.x = 0;
       break;
     case "Space":
       keys.Space.pressed = false;
