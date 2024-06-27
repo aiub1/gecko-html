@@ -2,7 +2,11 @@ class Player extends Sprite {
   constructor({
     canvas,
     position,
+    backgroundImageHeight,
+    divineApple,
     collisionBlocks,
+    leftWallCollisionBlocks,
+    rightWallCollisionBlocks,
     plataformCollisionBlocks,
     imageSrc,
     frameRate,
@@ -17,7 +21,12 @@ class Player extends Sprite {
       y: 1,
     };
 
+    this.divineApple = divineApple;
+    this.backgroundImageHeight = backgroundImageHeight;
+
     this.collisionBlocks = collisionBlocks;
+    this.leftWallCollisionBlocks = leftWallCollisionBlocks;
+    this.rightWallCollisionBlocks = rightWallCollisionBlocks;
     this.plataformCollisionBlocks = plataformCollisionBlocks;
 
     this.hitbox = {
@@ -81,7 +90,7 @@ class Player extends Sprite {
     const cameraBoxRightSide = this.cameraBox.position.x + this.cameraBox.width;
     const scaledDownCanvasWidth = canvas.width / 4;
 
-    if (cameraBoxRightSide >= 576) return;
+    if (cameraBoxRightSide >= 257) return;
 
     if (
       cameraBoxRightSide >=
@@ -114,7 +123,7 @@ class Player extends Sprite {
     const cameraBoxBottom = this.cameraBox.position.y + this.cameraBox.height;
     const scaledCanvasHeight = canvas.height / 4;
 
-    if (cameraBoxBottom + this.velocity.y >= 432) return;
+    if (cameraBoxBottom + this.velocity.y >= this.backgroundImageHeight) return;
 
     if (cameraBoxBottom >= Math.abs(camera.position.y) + scaledCanvasHeight) {
       camera.position.y -= this.velocity.y;
@@ -125,29 +134,29 @@ class Player extends Sprite {
   update() {
     this.updateFrames();
     this.updateHitbox();
+    this.updateCameraBox();
 
     // This draws out the camera box for visualization
-    this.updateCameraBox();
-    c.fillStyle = "rgba(0, 0, 255, 0.2)";
-    c.fillRect(
-      this.cameraBox.position.x,
-      this.cameraBox.position.y,
-      this.cameraBox.width,
-      this.cameraBox.height
-    );
+    // c.fillStyle = "rgba(0, 0, 255, 0.2)";
+    // c.fillRect(
+    //   this.cameraBox.position.x,
+    //   this.cameraBox.position.y,
+    //   this.cameraBox.width,
+    //   this.cameraBox.height
+    // );
 
     // // This draws out the full size of the image sprite file
     // c.fillStyle = "rgba(0, 255, 0, 0.2)";
     // c.fillRect(this.position.x, this.position.y, this.width, this.height);
 
     // This draws out the hitbox for visualization;
-    c.fillStyle = "rgba(255, 0, 0, 0.2)";
-    c.fillRect(
-      this.hitbox.position.x,
-      this.hitbox.position.y,
-      this.hitbox.width,
-      this.hitbox.height
-    );
+    // c.fillStyle = "rgba(255, 0, 0, 0.2)";
+    // c.fillRect(
+    //   this.hitbox.position.x,
+    //   this.hitbox.position.y,
+    //   this.hitbox.width,
+    //   this.hitbox.height
+    // );
 
     this.drawSprite();
 
@@ -156,9 +165,10 @@ class Player extends Sprite {
     this.checkForHorizontalCollisions();
     this.applyGravity();
     this.updateHitbox();
-    this.checkForVerticalCollisions();
-    this.updateLastDirection();
     this.checkForFloorCollisions();
+    this.checkForVerticalCollisions();
+    this.checkAppleCollision()
+    this.updateLastDirection();
     // console.log(this.velocity.y);
   }a
 
@@ -191,14 +201,16 @@ class Player extends Sprite {
       this.position.x = 0 - offset - 0.01;
     }
 
-    if (this.hitbox.position.x + this.hitbox.width >= 576) {
+    if (this.hitbox.position.x + this.hitbox.width >= 256) {
       // NOTE TO SELF: MAKE THE VALUE DYNAMIC LATER
       this.velocity.x = 0;
       const offset =
         this.hitbox.position.x - this.position.x + this.hitbox.width;
-      this.position.x = 576 - offset - 0.01;
+      this.position.x = 256 - offset - 0.01;
     }
 
+
+    // CHECK HORIZONTAL COLLISION WITH COMMON COLLISION BLOCKS
     for (let i = 0; i < this.collisionBlocks.length; i++) {
       const collisionBlock = this.collisionBlocks[i];
 
@@ -230,7 +242,78 @@ class Player extends Sprite {
         }
       }
     }
+
+    // CHECK HORIZONTAL COLLISION WITH LEFT WALL COLLISION BLOCKS
+    for (let i = 0; i < this.leftWallCollisionBlocks.length; i++) {
+      const leftWallCollisionBlock = this.leftWallCollisionBlocks[i];
+
+      if (
+        collision({
+          object1: this.hitbox,
+          object2: leftWallCollisionBlock,
+          canvas: this.canvas,
+        })
+      ) {
+        this.wallCollisionDetected = true;
+        if (this.velocity.x > 0) {
+          this.velocity.x = 0;
+          this.velocity.y = 0;
+
+          const offset =
+            this.hitbox.position.x - this.position.x + this.hitbox.width;
+
+          this.position.x = leftWallCollisionBlock.position.x - offset - 0.01;
+        }
+
+        if (this.velocity.x < 0) {
+          const offset = this.hitbox.position.x - this.position.x;
+
+          this.velocity.x = 0;
+          this.velocity.y = 0;
+          this.position.x =
+            leftWallCollisionBlock.position.x + leftWallCollisionBlock.width - offset + 0.01;
+        }
+      }
+    }
+
+    // CHECK HORIZONTAL COLLISION WITH RIGHT WALL COLLISION BLOCKS
+    for (let i = 0; i < this.rightWallCollisionBlocks.length; i++) {
+      const rightWallCollisionBlock = this.rightWallCollisionBlocks[i];
+
+      if (
+        collision({
+          object1: this.hitbox,
+          object2: rightWallCollisionBlock,
+          canvas: this.canvas,
+        })
+      ) {
+        this.wallCollisionDetected = true;
+        if (this.velocity.x > 0) {
+          this.velocity.x = 0;
+          this.velocity.y = 0;
+
+          const offset =
+            this.hitbox.position.x - this.position.x + this.hitbox.width;
+
+          this.position.x = rightWallCollisionBlock.position.x - offset - 0.01;
+        }
+
+        if (this.velocity.x < 0) {
+          const offset = this.hitbox.position.x - this.position.x;
+
+          this.velocity.x = 0;
+          this.velocity.y = 0;
+          this.position.x =
+            rightWallCollisionBlock.position.x + rightWallCollisionBlock.width - offset + 0.01;
+        }
+      }
+    }
+
+    
     // PLATAFORM COLLISIONS DETECTION
+
+    // TODO: REMOVE IT LATER
+
     for (let i = 0; i < this.plataformCollisionBlocks.length; i++) {
       const plataformCollisions = this.plataformCollisionBlocks[i];
 
@@ -291,7 +374,7 @@ class Player extends Sprite {
         }
 
         if (this.velocity.y < 0) {
-          this.floorCollisionDetected = true;
+          // this.floorCollisionDetected = true;
           this.playerHasJumped = false;
           this.velocity.y = 0;
 
@@ -359,23 +442,25 @@ class Player extends Sprite {
         this.floorCollisionDetected = true;
         this.playerHasJumped = false;
       } else {
-        // PLATAFORM COLLISIONS DETECTION
-        for (let i = 0; i < this.plataformCollisionBlocks.length; i++) {
-          const plataformCollisions = this.plataformCollisionBlocks[i];
+        this.floorCollisionDetected = false;
+      // } else {
+      //   // PLATAFORM COLLISIONS DETECTION
+      //   for (let i = 0; i < this.plataformCollisionBlocks.length; i++) {
+      //     const plataformCollisions = this.plataformCollisionBlocks[i];
 
-          if (
-            floorCollision({
-              player: this,
-              object1: this.hitbox,
-              object2: plataformCollisions,
-            })
-          ) {
-            this.floorCollisionDetected = true;
-            this.playerHasJumped = false;
-          } else {
-            this.floorCollisionDetected = false;
-          }
-        }
+      //     if (
+      //       floorCollision({
+      //         player: this,
+      //         object1: this.hitbox,
+      //         object2: plataformCollisions,
+      //       })
+      //     ) {
+      //       this.floorCollisionDetected = true;
+      //       this.playerHasJumped = false;
+      //     } else {
+      //       this.floorCollisionDetected = false;
+      //     }
+      //   }}
       }
     }
   }
@@ -388,5 +473,18 @@ class Player extends Sprite {
     } else if (this.velocity.x < 0) {
       this.lastDirection = "left";
     }
+  }
+
+  checkAppleCollision() {
+    if (
+      collision({
+        object1: this.hitbox,
+        object2: this.divineApple,
+        canvas: this.canvas,
+      })) {
+      this.divineApple.position.x = -20;
+      console.log("VOCÊ VENCEU!")
+      console.log("Your time: " + getElapsedTime())
+      }
   }
 }

@@ -2,14 +2,31 @@
 var canvas = document.querySelector("canvas"); 
 var c = canvas.getContext("2d"); 
 var gameStarted = false;
+let timeCounter;
 var gravity = 0.2;
 
 
 
 //////////////// UTILITY FUNCTIONS /////////////////
 
+function startTime() {
+  timeCounter = Date.now();
+  console.log(timeCounter)
+}
+
+// Function to get the elapsed time
+function getElapsedTime() {
+  let currentTime = Date.now();
+  let elapsedTime = currentTime - timeCounter;
+
+  let minutes = Math.floor(elapsedTime / 60000);
+  let seconds = Math.floor((elapsedTime % 60000) / 1000);
+
+  return `${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+}
+
 // conditions to determine if two objects are colliding ( ex.: object1 = player ; object2 = collisionBlock)
-function collision({ object1, object2, canvas }) {
+function collision({ object1, object2 }) {
   return (
     // floor collision
     object1.position.y + object1.height >= object2.position.y &&

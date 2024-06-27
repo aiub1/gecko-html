@@ -1,18 +1,18 @@
 GAME TODO 🕹️:
-  ✔ Draw method @done(24-06-19 23:24)
-  ✔ Add gravity @done(24-06-19 23:24)
-  ✔ Collision blocks @done(24-06-19 23:19)
+  ✔ Draw method @done(23:24 24-06-19)
+  ✔ Add gravity @done(23:24 24-06-19)
+  ✔ Collision blocks @done(23:19 24-06-19)
   ✔ Plataform Collisions @done(24-06-19 23:19)
   ✔ Movement mechanics @done(24-06-19 23:20)
   ✔ Charge jump mechanic @done(24-06-19 23:20)
   ✔ Disable movement when charging jump @done(24-06-19 23:20)
-  ✔ Draw sprites method @done(24-06-19 23:21)
-  ✔ Collisions for canvas limit @done(24-06-19 23:06)
-  ✔ Vertical/Horizontal Camera Paning @done(24-06-19 23:06)
-  ✔ Draw Intensity bar @done(24-06-21 00:58)
-  ✔ Finish jumping and bouncing mechanics @done(24-06-23 20:15)
-  ✔ Swap to real sprites @done(24-06-24 00:32)
-  ✔ Menu Screen @done(24-06-25 00:42)
+  ✔ Draw sprites method @done(23:21 24-06-19)
+  ✔ Collisions for canvas limit @done(23:06 24-06-19)
+  ✔ Vertical/Horizontal Camera Paning @done(23:06 24-06-19)
+  ✔ Draw Intensity bar @done(00:58 24-06-21)
+  ✔ Finish jumping and bouncing mechanics @done(20:15 24-06-23)
+  ✔ Swap to real sprites @done(00:32 24-06-24)
+  ✔ Menu Screen @done(00:42 24-06-25)
   ☐ Design Levels
   ☐ Make Instructions screen
   ☐ "Finish Line" (Collectable) and end game screen 
@@ -37,5 +37,6 @@ GAME TODO 🕹️:
     ✔ Player freezes when on top of plataforms @done(24-06-24 09:39)
     ✔ Hitbox glitching when player hits the side of a plataform @done(24-06-24 09:41)
     ✔ Page scrolls down when space is pressed @done(24-06-25 00:43)
-    ☐ X velocity randomly turns to 0 after bouncing
+    ✔ the menu's background image randomly does not load sometimes @done(18:42 25-06-24)
+    ☐ X velocity randomly turns to 0 after bouncing walls
     ☐ random A and D delay when standing on plataforms

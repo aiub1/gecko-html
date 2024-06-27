@@ -30,6 +30,19 @@ const quitBtn = new Sprite({
   imageSrc: "./assets/ui/menuBtn.png",
 });
 
+const commandScreenPositionX = canvas.width / 2 + 40;
+const commandScreenPositionY = canvas.height / 2;
+
+const commandScreen = new Sprite({
+  position: {
+    x: commandScreenPositionX,
+    y: commandScreenPositionY,
+  },
+  imageSrc: "./assets/ui/command_screen.png",
+});
+
+let commandScreenOpen = false;
+
 const buttons = [
   {
     text: "JOGAR",
@@ -60,6 +73,14 @@ const buttons = [
   },
 ];
 
+const commandScreenButton = {
+  x: commandScreen.width + 105,
+  y: 110,
+  width: 40,
+  height: 40,
+  textColor: "white",
+};
+
 function drawButton(button, hover = false) {
   c.fillStyle = "transparent";
   c.fillRect(button.x, button.y, button.width, button.height);
@@ -67,16 +88,26 @@ function drawButton(button, hover = false) {
   c.fillStyle = button.textColor;
   c.font = "24px joystix";
 
-  // Calculate the text width and height
   const textMetrics = c.measureText(button.text);
   const textWidth = textMetrics.width;
-  const textHeight = 30; // Approximate height for 30px Arial font
+  const textHeight = 30;
 
-  // Calculate the position to center the text
   const textX = button.x + (button.width - textWidth) / 2;
   const textY = button.y + (button.height - 12 + textHeight / 2) / 2;
 
   c.fillText(button.text, textX, textY);
+  if (commandScreenOpen) drawCommandScreen();
+}
+
+function drawCommandScreen() {
+  commandScreen.update();
+  c.fillStyle = "transparent";
+  c.fillRect(
+    commandScreenButton.x,
+    commandScreenButton.y,
+    commandScreenButton.width,
+    commandScreenButton.height
+  );
 }
 
 function drawMenu() {
@@ -110,7 +141,7 @@ canvas.addEventListener("mousemove", (e) => {
     }
   });
   canvas.style.cursor = cursor;
-  drawMenu();
+  if (!commandScreenOpen) drawMenu();
 });
 
 canvas.addEventListener("mousedown", (e) => {
@@ -128,14 +159,14 @@ canvas.addEventListener("mousedown", (e) => {
 
       if (button.name === "startBtn") {
         startBtn.updateImage("./assets/ui/pressedBtn.png");
-        startBtn.image.onload = () => drawMenu(); // Redraw menu once image is loaded
+        startBtn.image.onload = () => drawMenu();
       } else if (button.name === "controlsBtn") {
         controlsBtn.updateImage("./assets/ui/pressedBtn.png");
         controlsBtn.y -= 50;
-        (controlsBtn.image.onload = () => drawMenu()), drawButton(button); // Redraw menu once image is loaded
+        controlsBtn.image.onload = () => drawMenu();
       } else if (button.name === "quitBtn") {
         quitBtn.updateImage("./assets/ui/pressedBtn.png");
-        quitBtn.image.onload = () => drawMenu(); // Redraw menu once image is loaded
+        quitBtn.image.onload = () => drawMenu();
       }
     }
   });
@@ -162,31 +193,50 @@ canvas.addEventListener("mouseup", (e) => {
           canvas.style.display = "block";
           canvas.classList.add("active");
           drawMenu();
+          startTime();
         }, 300);
       } else if (button.text === "CONTROLES") {
         button.y -= 5;
-        alert("TELA DE CONTROLES");
+        commandScreenOpen = true;
       } else if (button.text === "SAIR") {
         button.y -= 5;
         canvas.style.display = "none";
         canvas.classList.add("disabled");
+        playPrompt.style.display = "flex";
+        overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+        main.style.height = "100vh";
+        main.style.overflow = "auto";
+        music.pause();  
       }
     }
   });
+
+  // Handle command screen button click
+  if (commandScreenOpen) {
+    if (
+      offsetX >= commandScreenButton.x &&
+      offsetX <= commandScreenButton.x + commandScreenButton.width &&
+      offsetY >= commandScreenButton.y &&
+      offsetY <= commandScreenButton.y + commandScreenButton.height
+    ) {
+      // Handle command screen button click action
+      console.log("Command screen button clicked");
+      commandScreenOpen = false;
+      drawMenu();
+    }
+  }
 });
 
 function menuLoop() {
   if (!gameStarted) {
     drawMenu();
-    window.requestAnimationFrame(menuLoop);
   }
 }
 
-// Ensure the menuBg image is loaded before starting the game loop
 window.addEventListener("DOMContentLoaded", () => {
   window.onload = () => {
     console.log("menuBg image loaded");
-    if (menuBg.loaded = true) menuLoop();
+    if (menuBg.loaded) menuLoop();
   };
 });
 
