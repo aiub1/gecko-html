@@ -13,20 +13,23 @@ GAME TODO 🕹️:
   ✔ Finish jumping and bouncing mechanics @done(20:15 24-06-23)
   ✔ Swap to real sprites @done(00:32 24-06-24)
   ✔ Menu Screen @done(00:42 24-06-25)
-  ☐ Design Levels
-  ☐ Make Instructions screen
-  ☐ "Finish Line" (Collectable) and end game screen 
+  ✔ Design Levels @done(22:14 27-06-24)
+  ✔ Make Instructions screen @done(22:14 27-06-24)
+  ✔ "Finish Line" (Collectable) @done(08:00 28-06-24)
+  ☐ Add end game screen 
   
   BONUS FEATURES 👽: 
+    ✔ Add music @done(08:00 28-06-24)
+    ☐ Add Sound effects
     ☐ Overrall Polish
     ☐ Code Refactor
+    ☐ Add player ranking
     ☐ Add moving plataforms
     ☐ Lock FPS for perfomance and game consistence
-    ☐ Add Sound effects and music
     ☐ Make it responsive
     ☐ Add Splash Screens
     
-  NÃO VAI DAR NEM FUDENDO... 💀:
+  It ain't happening within deadline 💀:
     ☐ Add enemies and environmental threats 
     ☐ Make it playable on mobile devices
     ☐ Fullscreen / Scaled mode
@@ -38,5 +41,6 @@ GAME TODO 🕹️:
     ✔ Hitbox glitching when player hits the side of a plataform @done(24-06-24 09:41)
     ✔ Page scrolls down when space is pressed @done(24-06-25 00:43)
     ✔ the menu's background image randomly does not load sometimes @done(18:42 25-06-24)
-    ☐ X velocity randomly turns to 0 after bouncing walls
-    ☐ random A and D delay when standing on plataforms
+    ✔ X velocity randomly turns to 0 after bouncing walls @done(22:15 27-06-24)
+    ✔ random A and D delay when standing on plataforms @done(22:15 27-06-24)
+    ☐ Some minor collision glitches, especially with the left and right wall collisions

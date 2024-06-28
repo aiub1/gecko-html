@@ -387,12 +387,23 @@ render();
 /////////////////////// JUMP MECHANIC /////////////////////////
 
 function increaseIntensity() {
-  if (counting) {
-    if (intensity == -7) intensity = 0;
-    intensity -= 1;
+  if ( keys.Space.pressed) {
+    if (intensity <= -7) {
+      intensity = -6;
+      setTimeout(() => {
+        intensity = 0
+        intensityBar.color = "rgb(0, 255,0)"
+      }, 200);
+    }
+      intensity -= 1;
     console.log(intensity);
-    setTimeout(increaseIntensity, 80);
-    intensityBar.width = intensity;
+    if (intensity <= -7) {
+      intensityBar.color = "red"
+    } else if (intensity <= -4) {
+      intensityBar.color = "yellow"
+    }
+      setTimeout(increaseIntensity, 115);
+      intensityBar.width = intensity - 1;
   }
 }
 
@@ -401,7 +412,7 @@ function jumpCoreMechanic() {
   player.velocity.y = intensity;
   player.playerHasJumped = true;
   lastIntetensity = intensity;
-  if (player.floorCollisionDetected) intensity = 0;
+  // if (player.floorCollisionDetected) intensity = 0;
   intensityBar.width = 0;
 }
 
@@ -437,6 +448,7 @@ window.addEventListener("keydown", (event) => {
               keys.Space.pressed = true;
               counting = true;
               increaseIntensity();
+              intensityBar.color = "rgb(0, 255,0)"
             }
             break;
           }
@@ -456,5 +468,6 @@ window.addEventListener("keyup", (event) => {
     case "Space":
       keys.Space.pressed = false;
       jumpCoreMechanic();
+      intensity = 0
   }
 });
