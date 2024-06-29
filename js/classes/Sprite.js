@@ -1,69 +1,77 @@
- class Sprite {
+class Sprite {
   constructor({ position, imageSrc, frameRate = 1, scale = 1 }) {
-    this.position = position;
-    this.scale = scale;
-    this.frameRate = frameRate;
-    this.loaded = false;
-    this.image = new Image();
+    // Inicializa os atributos da classe com os valores fornecidos
+    this.position = position; // Posição inicial do sprite
+    this.scale = scale; // Escala do sprite (tamanho relativo)
+    this.frameRate = frameRate; // Taxa de quadros por segundo para animação
+    this.loaded = false; // Flag para indicar se a imagem foi carregada
+    this.image = new Image(); // Cria um objeto Image do HTML5 para carregar a imagem do sprite
     
+    // Evento disparado quando a imagem é carregada com sucesso
     this.image.onload = () => {
+      // Calcula a largura e altura do sprite após o carregamento, considerando a escala e a taxa de quadros
       this.width = (this.image.width / this.frameRate) * this.scale;
-      this.height = (this.image.height) * this.scale;
-      this.loaded = true;
+      this.height = this.image.height * this.scale;
+      this.loaded = true; // Marca a imagem como carregada
     };
-    this.image.src = imageSrc;
-    this.image.onload();
-    this.currentFrame = 0;
-    this.frameBuffer = 4;
-    this.elapsedFrames = 0;
+    
+    this.image.src = imageSrc; // Define a fonte da imagem para carregar
+    this.image.onload(); // Força a carga imediata da imagem
+    this.currentFrame = 0; // Frame atual da animação do sprite
+    this.frameBuffer = 4; // Buffer de quadros para controlar a animação suave
+    this.elapsedFrames = 0; // Contador de quadros decorridos desde o último frame atualizado
   }
 
-  
-
+  // Método para desenhar o sprite no canvas
   drawSprite() {
-  
-    if (!this.loaded) return;
+    if (!this.loaded) return; // Se a imagem não estiver carregada, sai do método
+
+    // Define a área de recorte da imagem com base no frame atual e na taxa de quadros
     const cropbox = {
       position: {
-        x: this.currentFrame * (this.image.width / this.frameRate),
-        y: 0,
+        x: this.currentFrame * (this.image.width / this.frameRate), // Posição X no sprite (frame atual)
+        y: 0, // Posição Y no sprite (fixa em 0, pois não há animação vertical)
       },
-      width: this.image.width / this.frameRate,
-      height: this.image.height,
+      width: this.image.width / this.frameRate, // Largura de um frame do sprite
+      height: this.image.height, // Altura do sprite (constante para todos os frames)
     };
 
-
+    // Desenha a imagem recortada no canvas na posição e escala especificadas
     c.drawImage(
-      this.image,
-      cropbox.position.x,
-      cropbox.position.y,
-      cropbox.width,
-      cropbox.height,
-      this.position.x,
-      this.position.y,
-      this.width,
-      this.height
+      this.image, // Imagem a ser desenhada
+      cropbox.position.x, // Posição X no sprite (recorte)
+      cropbox.position.y, // Posição Y no sprite (recorte)
+      cropbox.width, // Largura do frame do sprite
+      cropbox.height, // Altura do sprite
+      this.position.x, // Posição X no canvas onde a imagem será desenhada
+      this.position.y, // Posição Y no canvas onde a imagem será desenhada
+      this.width, // Largura da imagem no canvas (considerando a escala)
+      this.height // Altura da imagem no canvas (considerando a escala)
     );
-   }
-   
-   updateImage(newSrc) {
-    this.image.src = newSrc;
+  }
+
+  // Método para atualizar a imagem do sprite
+  updateImage(newSrc) {
+    this.image.src = newSrc; // Define uma nova fonte de imagem
     this.image.onload = () => {
-      this.drawSprite();
+      this.drawSprite(); // Redesenha o sprite quando a nova imagem é carregada
     };
   }
 
+  // Método chamado a cada quadro para atualizar o estado do sprite
   update() {
-    this.drawSprite();
-    this.updateFrames();
+    this.drawSprite(); // Desenha o sprite atualizado no canvas
+    this.updateFrames(); // Atualiza o frame atual da animação do sprite
   }
 
+  // Método para atualizar os quadros da animação
   updateFrames() {
-    this.elapsedFrames++;
+    this.elapsedFrames++; // Incrementa o contador de quadros decorridos
 
+    // Verifica se é necessário atualizar o frame atual com base no buffer de quadros
     if (this.elapsedFrames % this.frameBuffer === 0) {
-      if (this.currentFrame < this.frameRate - 1) this.currentFrame++;
-      else this.currentFrame = 0;
+      if (this.currentFrame < this.frameRate - 1) this.currentFrame++; // Avança para o próximo frame se não estiver no último
+      else this.currentFrame = 0; // Volta ao primeiro frame se estiver no último
     }
   }
 }

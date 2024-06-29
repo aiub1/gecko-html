@@ -199,6 +199,53 @@ canvas {
   box-shadow: var(--accent-color) 1px 8px 30px -10px;
 }
 
+.endStats {
+  /* display: flex; */
+  display: none;
+  flex-direction: column;
+  font-size: 24px;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  width: 30%;
+  margin: 0 auto; /* Centers the container on the page */
+}
+
+.endStats__title__container {
+  display: flex;
+  flex-direction: column;
+  font-size: 24px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.endStats i {
+  font-size: 175px;
+  margin-top: 150px;
+}
+
+.endStats___text__container {
+  width: 100%;
+}
+
+.stats-title__item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%; /* Ensures the list item takes full width */
+}
+
+.stats-title__item .endStats__text {
+  margin-right: auto; /* Aligns to the left */
+}
+
+.stats-title__item .endStats__result {
+  margin-left: auto; /* Aligns to the right */
+}
+
+
+
 .about {
   margin: 250px 0;
   display: flex;

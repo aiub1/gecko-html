@@ -1,3 +1,8 @@
+// MATRIZ DE COLISÕES
+// INDICA A POSIÇÃO DE CADA BLOCO DE COLISÇÃO
+
+// COLISÃO DE PLATAFORMAS 
+
 const floorCollisions = [
   1737, 1737, 1737, 1737, 1737, 1737, 1737, 1737, 1737, 1737, 1737, 1737, 1737,
   1737, 1737, 1737, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -175,6 +180,7 @@ const floorCollisions = [
   0, 0, 0,
 ];
 
+// COLISÕES DA PAREDE DIREITA
 const rightWallCollisions = [
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 1737, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1737, 0, 0,
@@ -344,6 +350,7 @@ const rightWallCollisions = [
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ];
 
+// COLISÕES DA PAREDE ESQUERDA
 const leftWallCollisions = [
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1737, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 1737, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1737,
@@ -516,4 +523,3 @@ const leftWallCollisions = [
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ];
 
-const plataformCollisions = [0];

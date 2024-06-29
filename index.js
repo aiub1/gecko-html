@@ -1,11 +1,13 @@
-/////////////// HTML CONFIG /////////////
+/////////////// MANIPULADOR HTML /////////////
 const main = document.getElementById("main");
 const overlay = document.getElementById("overlay");
 const playBtn = document.getElementById("playBtn");
 const playPrompt = document.getElementById("playPrompt");
 const navButtons = document.querySelectorAll("#nav-scroll");
 const sountrack = document.getElementById("music");
+const winningScreen = document.getElementById("endStats");
 
+// Função para rolar a página suavemente até um elemento específico
 const scrollToElem = (element, position) => {
   element.scrollIntoView({
     behavior: "smooth",
@@ -14,8 +16,8 @@ const scrollToElem = (element, position) => {
   });
 };
 
-// TODO: UNFREEZE PAGE SCROLLING WHEN THE PLAYER QUITS THE GAME
-playBtn.addEventListener("click", () => {
+// Exibe o canvas, inicializa a música e atualiza o estilo do HTML
+playBtn.addEventListener("click", () => { 
   window.scrollToElem = (playBtn, "start");
   playPrompt.style.display = "none";
   canvas.style.display = "block";
@@ -23,69 +25,54 @@ playBtn.addEventListener("click", () => {
   overlay.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
   main.style.height = "100%";
   main.style.overflow = "hidden";
+  winningScreen.innerHTML = "";
+  winningScreen.style.display = "none";
   music.play();
 });
 
+// Adiciona evento de clique nos botões de navegação para rolar a página até a seção correspondente
 navButtons.forEach((button) => {
   const name = button.getAttribute("name");
   const scrollTo = document.getElementById(name);
   button.addEventListener("click", () => scrollToElem(scrollTo, "center"));
 });
 
-/////////////// CANVAS CONFIG /////////////
+/////////////// CONFIGURAÇÃO DO CANVAS /////////////
 
 canvas.width = 1024;
 canvas.height = 576;
 
+// Define as dimensões escaladas do canvas
 const scaledCanvas = {
   width: canvas.width / 4,
   height: canvas.height / 4,
 };
 
-/////////////// DEFINE COLLISION BLOCKS ///////////////////
+/////////////// DEFINIÇÃO DE BLOCOS DE COLISÃO ///////////////////
 
+// Converte a matriz de colisões do chão em uma matriz 2D
 const floorCollisions2D = [];
 for (let i = 0; i < floorCollisions.length; i += 16) {
   floorCollisions2D.push(floorCollisions.slice(i, i + 16));
 }
 
+// Converte a matriz de colisões da parede esquerda em uma matriz 2D
 const leftWallCollisions2D = [];
 for (let i = 0; i < leftWallCollisions.length; i += 16) {
   leftWallCollisions2D.push(leftWallCollisions.slice(i, i + 16));
 }
 
+// Converte a matriz de colisões da parede direita em uma matriz 2D
 const rightWallCollisions2D = [];
 for (let i = 0; i < rightWallCollisions.length; i += 16) {
   rightWallCollisions2D.push(rightWallCollisions.slice(i, i + 16));
 }
 
-// TODO: REMOVE PLATAFORM COLLISIONS
-const plataformCollisions2D = [];
-for (let i = 0; i < plataformCollisions.length; i += 36) {
-  plataformCollisions2D.push(plataformCollisions.slice(i, i + 36));
-}
-
 const collisionBlocks = [];
 const leftWallCollisionBlocks = [];
 const rightWallCollisionBlocks = [];
-const plataformCollisionBlocks = [];
 
-plataformCollisions2D.forEach((row, y) => {
-  row.forEach((symbol, x) => {
-    if (symbol === 202) {
-      plataformCollisionBlocks.push(
-        new CollisionBlock({
-          position: {
-            x: x * 16,
-            y: y * 16,
-          },
-          height: 4,
-        })
-      );
-    }
-  });
-});
-
+// Instancia blocos de colisão para o chão
 floorCollisions2D.forEach((row, y) => {
   row.forEach((symbol, x) => {
     if (symbol === 1737) {
@@ -101,6 +88,7 @@ floorCollisions2D.forEach((row, y) => {
   });
 });
 
+// Instancia blocos de colisão para a parede esquerda
 leftWallCollisions2D.forEach((row, y) => {
   row.forEach((symbol, x) => {
     if (symbol === 1737) {
@@ -117,6 +105,7 @@ leftWallCollisions2D.forEach((row, y) => {
   });
 });
 
+// Instancia blocos de colisão para a parede direita
 rightWallCollisions2D.forEach((row, y) => {
   row.forEach((symbol, x) => {
     if (symbol === 1737) {
@@ -133,7 +122,9 @@ rightWallCollisions2D.forEach((row, y) => {
   });
 });
 
-////////////////// OVERALL CONFIGURATIONS //////////////////
+////////////////// INICIALIZAÇÃO E CONFIGURAÇÕES GERAIS //////////////////
+
+// Variaveis auxiliares
 let intensity = 0;
 let lastIntetensity = 0;
 let counting = false;
@@ -141,6 +132,7 @@ let timer = null;
 
 const backgroundImageHeight = 4096;
 
+// Instancia o sprite da maçã divina
 const divineApple = new Sprite({
   position: {
     x: 85,
@@ -149,11 +141,11 @@ const divineApple = new Sprite({
   imageSrc: "./assets/sprites/environment/apple.png",
 });
 
+// Instancia o objeto do jogador
 const player = new Player({
   canvas,
   position: {
     x: 100,
-    //y: 0
     y: 3980,
   },
   backgroundImageHeight,
@@ -161,7 +153,6 @@ const player = new Player({
   collisionBlocks,
   leftWallCollisionBlocks,
   rightWallCollisionBlocks,
-  plataformCollisionBlocks,
   imageSrc: "./assets/sprites/player/Idle2.png",
   frameRate: 8,
   animations: {
@@ -208,6 +199,7 @@ const player = new Player({
   },
 });
 
+// Instancia o objeto do background
 const background = new Sprite({
   position: {
     x: 0,
@@ -216,6 +208,7 @@ const background = new Sprite({
   imageSrc: "./assets/GECKO_LVL_3.png",
 });
 
+// Instancia o objeto da barra de intensidade
 const intensityBar = new IntensityBar({
   position: {
     x: 0,
@@ -224,7 +217,7 @@ const intensityBar = new IntensityBar({
   player,
 });
 
-// Object the stores the last key pressed and the key being pressed at the moment
+// Objeto que armazena o estado das teclas pressionadas
 const keys = {
   KeyD: {
     pressed: false,
@@ -242,17 +235,74 @@ const keys = {
   },
 };
 
-///////////////////////// MAIN RENDERER ///////////////////////////
+// Instancia o objeto da camera
 const camera = {
   position: {
     x: 0,
-    //y: 0
     y: -backgroundImageHeight + scaledCanvas.height,
   },
 };
 
+///////////////////////////// METODO DE RESET ///////////////////////////////
+
+// Função para resetar o estado o gameloop
+function gameReset() {
+  if (gameReseted && gameStarted) {
+    player.position.x = 100;
+    player.position.y = 3980;
+    divineApple.position.x = 85;
+    divineApple.position.y = 50;
+    camera.position.x = 0;
+    camera.position.y = -backgroundImageHeight + scaledCanvas.height;
+
+    canvas.style.display = "none"; // Esconde o canvas do jogo
+    canvas.classList.add("disabled");
+    playPrompt.style.display = "flex";
+    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    main.style.height = "100vh";
+    main.style.overflow = "auto";
+    music.pause(); // Pausa a música de fundo, se houver
+    music.currentTime = 0;
+
+    winningScreen.innerHTML = `
+    <div class="endStats__title__container">
+        <i class="fa-solid fa-trophy"></i>
+        <h2 class="endStats__title">VOCÊ VENCEU!</h2>
+        <p class="endStats__subtext">Obrigado por jogar!</p>
+      </div>
+      <div class="endStats___text__container">
+          <ul class="endStats__stats-title-list">
+            <li class="stats-title__item"><p class="endStats__text">Seu tempo: </p> <p class="endStats__result">${getElapsedTime()}</p></li>
+            <li class="stats-title__item"><p class="endStats__text">Total de pulos: <p class="endStats__result" >${jumpCounter}</p></p></li>
+            <li class="stats-title__item"><p class="endStats__text">Total de quicadas: <p class="endStats__result">${bouncingCounter}</p></p></li>
+          </ul>
+      </div>`;
+    winningScreen.style.display = "flex";
+    scrollToElem(winningScreen, "start");
+
+    jumpCounter = 0;
+    bouncingCounter = 0;
+    timeCounter = 0;
+
+    gameStarted = false;
+    gameReseted = false;
+  } else if (gameReseted) {
+    player.position.x = 100;
+    player.position.y = 3980;
+    player.velocity.x = 0;
+    player.velocity.y = 0;
+    divineApple.position.x = 85;
+    divineApple.position.y = 50;
+  }
+}
+
+///////////////////////// METODO DE RENDERIZAÇÃO ///////////////////////////
+
+// Renderiza e atualiza o estado do jogo o máxima de frames por segundo que conseguir
 function render() {
   window.requestAnimationFrame(render);
+
+  gameReset();
 
   if (!gameStarted) return;
 
@@ -263,9 +313,11 @@ function render() {
   c.scale(4, 4);
   c.translate(camera.position.x, camera.position.y);
 
+  // Renderiza o background a maçã
   background.update();
   divineApple.update();
 
+  // Renderiza os blocos de colisão
   collisionBlocks.forEach((collisionBlocks) => {
     collisionBlocks.update();
   });
@@ -278,18 +330,14 @@ function render() {
     rightWallCollisionBlocks.update();
   });
 
-  plataformCollisionBlocks.forEach((plataformCollisionBlocks) => {
-    plataformCollisionBlocks.update();
-  });
-
   player.update();
 
-  // DRAW AND UPDATE TIMER
+  // Desenha e atualiza o cronômetro
   c.font = "7px joystix";
   c.fillStyle = "white";
   c.fillText(getElapsedTime(), 215, Math.abs(camera.position.y) + 12);
 
-  // If the a direction key is being pressed and the player is on the ground moves the player to the direction
+  // Conforme a tecla apertada move o jogador na respectiva direção e atualiza os srites
   if (
     keys.KeyA.pressed ||
     (player.velocity.x < 0 &&
@@ -298,7 +346,6 @@ function render() {
   ) {
     player.switchSprite("RunLeft");
     player.velocity.x = -2;
-    player.PanCameraToTheRight({ canvas, camera }); ///////////////////////////////////// MOVE IT ////////////////////////////////////////
   } else if (
     keys.KeyD.pressed ||
     (player.velocity.x > 0 &&
@@ -307,13 +354,13 @@ function render() {
   ) {
     player.switchSprite("Run");
     player.velocity.x = 2;
-    player.PanCameraToTheLeft({ canvas, camera }); ///////////////////////////////////// MOVE IT ////////////////////////////////////////
   } else if (player.velocity.x === 0 && player.lastDirection === "left") {
     player.switchSprite("IdleLeft");
   } else if (player.velocity.x === 0) {
     player.switchSprite("Idle");
   }
 
+  // Move a camera caso o jogador atinja o limite da tela e atualiza os sprites de pula e queda
   if (player.velocity.y < 0) {
     player.PanCameraDown({ canvas, camera });
     if (player.lastDirection === "right") player.switchSprite("Jump");
@@ -324,18 +371,19 @@ function render() {
     else player.switchSprite("FallLeft");
   }
 
-  // Condition to make the player jump left when "A" was last pressed
+  // Condição para fazer o jogador pular para a esquerda quando "A" foi a última tecla pressionada
   if (player.playerHasJumped && keys.KeyA.lastPressed === true)
     player.velocity.x = -2;
 
-  // Condition to make the player jump right when "D" was last pressed
+  // Condição para fazer o jogador pular para a direita quando "D" foi a última tecla pressionada
   if (player.playerHasJumped && keys.KeyD.lastPressed === true)
     player.velocity.x = 2;
 
-  // Condition to make the player jump up when "W" was last pressed
+  // Condição para fazer o jogador pular para cima quando "W" foi a última tecla pressionada
   if (player.playerHasJumped && keys.KeyW.lastPressed === true)
     player.velocity.x = 0;
 
+  // Condição para manter o jogador parado ele não aperta nenhum comando
   if (player.floorCollisionDetected) {
     if (!keys.KeyA.pressed && !keys.KeyD.pressed) {
       player.velocity.y = 0;
@@ -343,36 +391,22 @@ function render() {
     }
   }
 
-  if (player.plataformCollisionDetected) {
-    if (!keys.KeyA.pressed && !keys.KeyD.pressed) {
-      player.velocity.y = 0;
-      player.velocity.x = 0;
-      player.playerHasJumped = false;
-      player.plataformCollisionDetected = false;
-      player.floorCollisionDetected = true;
-    }
-  }
-
-  if (!player.floorCollisionDetected) {
-    player.plataformCollisionDetected = false;
-  }
-
-  // console.log(player.plataformCollisionDetected);
-
+  // Condição para rebnderizar a barra de intensidade
   if (keys.Space.pressed) {
     player.velocity.x = 0;
     intensityBar.drawBar();
   }
 
-  // Bouncing off the walls mechanic
+  // Mecânica de rebote nas paredes
   if (player.wallCollisionDetected && !player.floorCollisionDetected) {
     player.velocity.x = player.velocity.x * -1;
     player.velocity.y = lastIntetensity / 1.5;
     keys.KeyA.lastPressed = false;
     keys.KeyD.lastPressed = false;
+    bouncingCounter++;
   }
 
-  // Reset the keys, even if the player keeps holding and never releases it
+  // Reseta as teclas, mesmo se o jogador continuar segurando depois de pular
   if (player.playerHasJumped) {
     keys.KeyA.pressed = false;
     keys.KeyD.pressed = false;
@@ -384,39 +418,41 @@ function render() {
 
 render();
 
-/////////////////////// JUMP MECHANIC /////////////////////////
+/////////////////////// MECÂNICA DE PULO /////////////////////////
 
+// Função para aumentar a intensidade do pulo e atualizar a barra
 function increaseIntensity() {
-  if ( keys.Space.pressed) {
+  if (keys.Space.pressed) {
     if (intensity <= -7) {
       intensity = -6;
       setTimeout(() => {
-        intensity = 0
-        intensityBar.color = "rgb(0, 255,0)"
+        intensity = 0;
+        intensityBar.color = "rgb(0, 255,0)";
       }, 200);
     }
-      intensity -= 1;
+    intensity -= 1;
     console.log(intensity);
     if (intensity <= -7) {
-      intensityBar.color = "red"
+      intensityBar.color = "red";
     } else if (intensity <= -4) {
-      intensityBar.color = "yellow"
+      intensityBar.color = "yellow";
     }
-      setTimeout(increaseIntensity, 115);
-      intensityBar.width = intensity - 1;
+    setTimeout(increaseIntensity, 115);
+    intensityBar.width = intensity - 1;
   }
 }
 
+// Função principal da mecânica de pulo
 function jumpCoreMechanic() {
   counting = false;
   player.velocity.y = intensity;
   player.playerHasJumped = true;
   lastIntetensity = intensity;
-  // if (player.floorCollisionDetected) intensity = 0;
   intensityBar.width = 0;
+  jumpCounter++;
 }
 
-///////////////////////// COMMANDS / KEY HANDLERS ///////////////////////////
+///////////////////////// COMANDOS / MANIPULADORES DE TECLAS ///////////////////////////
 
 window.addEventListener("keydown", (event) => {
   if (!player.playerHasJumped)
@@ -443,15 +479,13 @@ window.addEventListener("keydown", (event) => {
           if (player.velocity.y === 0 && !counting) {
             player.velocity.x = 0;
             keys.KeyA.pressed = false;
-            {
-              keys.KeyD.pressed = false;
-              keys.Space.pressed = true;
-              counting = true;
-              increaseIntensity();
-              intensityBar.color = "rgb(0, 255,0)"
-            }
-            break;
+            keys.KeyD.pressed = false;
+            keys.Space.pressed = true;
+            counting = true;
+            increaseIntensity();
+            intensityBar.color = "rgb(0, 255,0)";
           }
+          break;
       }
 });
 
@@ -468,6 +502,6 @@ window.addEventListener("keyup", (event) => {
     case "Space":
       keys.Space.pressed = false;
       jumpCoreMechanic();
-      intensity = 0
+      intensity = 0;
   }
 });

@@ -1,3 +1,4 @@
+// Definição dos sprites para o fundo do menu e botões do menu
 const menuBg = new Sprite({
   position: {
     x: 0,
@@ -30,6 +31,7 @@ const quitBtn = new Sprite({
   imageSrc: "./assets/ui/menuBtn.png",
 });
 
+// Posição da tela de comandos e criação do sprite para ela
 const commandScreenPositionX = canvas.width / 2 + 40;
 const commandScreenPositionY = canvas.height / 2;
 
@@ -41,8 +43,9 @@ const commandScreen = new Sprite({
   imageSrc: "./assets/ui/command_screen.png",
 });
 
-let commandScreenOpen = false;
+let commandScreenOpen = false; // Flag para indicar se a tela de comandos está aberta
 
+// Configuração dos botões do menu
 const buttons = [
   {
     text: "JOGAR",
@@ -73,6 +76,7 @@ const buttons = [
   },
 ];
 
+// Configuração do botão na tela de comandos
 const commandScreenButton = {
   x: commandScreen.width + 105,
   y: 110,
@@ -81,6 +85,7 @@ const commandScreenButton = {
   textColor: "white",
 };
 
+// Função para desenhar um botão no canvas
 function drawButton(button, hover = false) {
   c.fillStyle = "transparent";
   c.fillRect(button.x, button.y, button.width, button.height);
@@ -99,6 +104,7 @@ function drawButton(button, hover = false) {
   if (commandScreenOpen) drawCommandScreen();
 }
 
+// Função para desenhar a tela de comandos no canvas
 function drawCommandScreen() {
   commandScreen.update();
   c.fillStyle = "transparent";
@@ -110,6 +116,7 @@ function drawCommandScreen() {
   );
 }
 
+// Função para desenhar o menu principal no canvas
 function drawMenu() {
   c.clearRect(0, 0, canvas.width, canvas.height);
   if (menuBg.loaded) {
@@ -123,6 +130,7 @@ function drawMenu() {
   buttons.forEach((button) => drawButton(button));
 }
 
+// Evento de movimento do mouse para detectar hover nos botões do menu
 canvas.addEventListener("mousemove", (e) => {
   const { offsetX, offsetY } = e;
   let cursor = "default";
@@ -144,6 +152,7 @@ canvas.addEventListener("mousemove", (e) => {
   if (!commandScreenOpen) drawMenu();
 });
 
+// Evento de clique do mouse nos botões do menu
 canvas.addEventListener("mousedown", (e) => {
   const { offsetX, offsetY } = e;
   buttons.forEach((button) => {
@@ -157,6 +166,7 @@ canvas.addEventListener("mousedown", (e) => {
       button.y += 5;
       button.textColor = "rgb(242, 233, 16)";
 
+      // Ações específicas para cada botão do menu
       if (button.name === "startBtn") {
         startBtn.updateImage("./assets/ui/pressedBtn.png");
         startBtn.image.onload = () => drawMenu();
@@ -172,6 +182,7 @@ canvas.addEventListener("mousedown", (e) => {
   });
 });
 
+// Evento de liberação do clique do mouse nos botões do menu
 canvas.addEventListener("mouseup", (e) => {
   const { offsetX, offsetY } = e;
   buttons.forEach((button) => {
@@ -182,14 +193,17 @@ canvas.addEventListener("mouseup", (e) => {
       offsetY >= button.y &&
       offsetY <= button.y + button.height
     ) {
+      // Restaura a imagem dos botões após o clique
       startBtn.updateImage("./assets/ui/menuBtn.png");
       controlsBtn.updateImage("./assets/ui/menuBtn.png");
       quitBtn.updateImage("./assets/ui/menuBtn.png");
+
+      // Ações específicas para cada botão do menu
       if (button.text === "JOGAR") {
         button.y -= 5;
         button.textColor = "yellow";
         setTimeout(() => {
-          gameStarted = true;
+          gameStarted = true; // Inicia o jogo após um pequeno atraso
           canvas.style.display = "block";
           canvas.classList.add("active");
           drawMenu();
@@ -197,21 +211,22 @@ canvas.addEventListener("mouseup", (e) => {
         }, 300);
       } else if (button.text === "CONTROLES") {
         button.y -= 5;
-        commandScreenOpen = true;
+        commandScreenOpen = true; // Abre a tela de comandos
       } else if (button.text === "SAIR") {
         button.y -= 5;
-        canvas.style.display = "none";
+        canvas.style.display = "none"; // Esconde o canvas do jogo
         canvas.classList.add("disabled");
         playPrompt.style.display = "flex";
         overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
         main.style.height = "100vh";
         main.style.overflow = "auto";
-        music.pause();  
+        music.pause(); // Pausa a música de fundo, se houver
+        music.currentTime = 0;
       }
     }
   });
 
-  // Handle command screen button click
+  // Implementa o botão X da tela de controles
   if (commandScreenOpen) {
     if (
       offsetX >= commandScreenButton.x &&
@@ -219,27 +234,30 @@ canvas.addEventListener("mouseup", (e) => {
       offsetY >= commandScreenButton.y &&
       offsetY <= commandScreenButton.y + commandScreenButton.height
     ) {
-      // Handle command screen button click action
+      // Ação ao clicar no botão da tela de comandos
       console.log("Command screen button clicked");
-      commandScreenOpen = false;
+      commandScreenOpen = false; // Fecha a tela de comandos
       drawMenu();
     }
   }
 });
 
+// Função principal de renderização do menu
 function menuLoop() {
   if (!gameStarted) {
     drawMenu();
   }
 }
 
+// Evento disparado quando a página HTML é carregada
 window.addEventListener("DOMContentLoaded", () => {
   window.onload = () => {
     console.log("menuBg image loaded");
-    if (menuBg.loaded) menuLoop();
+    if (menuBg.loaded) menuLoop(); // Inicia o loop de renderização do menu quando a imagem de fundo é carregada
   };
 });
 
+// Tratamento de erro caso a imagem de fundo do menu não seja carregada corretamente
 menuBg.image.onerror = () => {
   console.error("Failed to load menuBg image");
 };

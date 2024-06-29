@@ -1,35 +1,49 @@
-GAME TODO 🕹️:
-  ✔ Draw method @done(23:24 24-06-19)
-  ✔ Add gravity @done(23:24 24-06-19)
-  ✔ Collision blocks @done(23:19 24-06-19)
-  ✔ Plataform Collisions @done(24-06-19 23:19)
-  ✔ Movement mechanics @done(24-06-19 23:20)
-  ✔ Charge jump mechanic @done(24-06-19 23:20)
-  ✔ Disable movement when charging jump @done(24-06-19 23:20)
-  ✔ Draw sprites method @done(23:21 24-06-19)
-  ✔ Collisions for canvas limit @done(23:06 24-06-19)
-  ✔ Vertical/Horizontal Camera Paning @done(23:06 24-06-19)
-  ✔ Draw Intensity bar @done(00:58 24-06-21)
-  ✔ Finish jumping and bouncing mechanics @done(20:15 24-06-23)
-  ✔ Swap to real sprites @done(00:32 24-06-24)
-  ✔ Menu Screen @done(00:42 24-06-25)
-  ✔ Design Levels @done(22:14 27-06-24)
-  ✔ Make Instructions screen @done(22:14 27-06-24)
-  ✔ "Finish Line" (Collectable) @done(08:00 28-06-24)
-  ☐ Add end game screen 
+GAME DEADLINE [28/06/24] @critical
+
+GAME TODO:
+  GAME-LOOP 🕹️:
+    ✔ Draw method @done(23:24 24-06-19)
+    ✔ Add gravity @done(23:24 24-06-19)
+    ✔ Collision blocks @done(23:19 24-06-19)
+    ✔ Plataform Collisions @done(24-06-19 23:19)
+    ✔ Movement mechanics @done(24-06-19 23:20)
+    ✔ Charge jump mechanic @done(24-06-19 23:20)
+    ✔ Disable movement when charging jump @done(24-06-19 23:20)
+    ✔ Draw sprites method @done(23:21 24-06-19)
+    ✔ Collisions for canvas limit @done(23:06 24-06-19)
+    ✔ Vertical/Horizontal Camera Paning @done(23:06 24-06-19)
+    ✔ Draw Intensity bar @done(00:58 24-06-21)
+    ✔ Finish jumping and bouncing mechanics @done(20:15 24-06-23)
+    ✔ Swap to real sprites @done(00:32 24-06-24)
+    ✔ Menu Screen @done(00:42 24-06-25)
+    ✔ Design Levels @done(22:14 27-06-24)
+    ✔ Make Instructions screen @done(22:14 27-06-24)
+    ✔ "Finish Line" (Collectable) @done(08:00 28-06-24)
+    ✔ Add end game screen @done(20:50 28-06-24)
+    ✔ Add game reset after winning/quiting @done(20:50 28-06-24)
   
+  MINOR ADJUSTMENTS:
+    ☐ Add basic tips directly to the background
+    ☐ Make the plataforms on Grass level easier for gameplay balance
+    ☐ Fix background paint on Grass Level
+    ☐ Fix background layer on Grass level
+    ✔ Lower the Intensity Bar speed @done(10:36 28-06-24)
+    ✔ Add different colors to Intensity bar @done(10:36 28-06-24)
+
+
   BONUS FEATURES 👽: 
     ✔ Add music @done(08:00 28-06-24)
     ☐ Add Sound effects
     ☐ Overrall Polish
-    ☐ Code Refactor
     ☐ Add player ranking
+    ☐ Code Refactor
     ☐ Add moving plataforms
     ☐ Lock FPS for perfomance and game consistence
     ☐ Make it responsive
     ☐ Add Splash Screens
     
   It ain't happening within deadline 💀:
+    ☐ Add In-game pause menu
     ☐ Add enemies and environmental threats 
     ☐ Make it playable on mobile devices
     ☐ Fullscreen / Scaled mode
