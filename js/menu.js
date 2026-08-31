@@ -130,9 +130,9 @@ function drawMenu() {
   buttons.forEach((button) => drawButton(button));
 }
 
-// Evento de movimento do mouse para detectar hover nos botões do menu
-canvas.addEventListener("mousemove", (e) => {
-  const { offsetX, offsetY } = e;
+// Evento de movimento do ponteiro (mouse/touch) para detectar hover nos botões do menu
+canvas.addEventListener("pointermove", (e) => {
+  const { x: offsetX, y: offsetY } = getCanvasPointerPosition(e);
   let cursor = "default";
   buttons.forEach((button) => {
     const hover =
@@ -152,9 +152,9 @@ canvas.addEventListener("mousemove", (e) => {
   if (!commandScreenOpen) drawMenu();
 });
 
-// Evento de clique do mouse nos botões do menu
-canvas.addEventListener("mousedown", (e) => {
-  const { offsetX, offsetY } = e;
+// Evento de clique/toque nos botões do menu
+canvas.addEventListener("pointerdown", (e) => {
+  const { x: offsetX, y: offsetY } = getCanvasPointerPosition(e);
   buttons.forEach((button) => {
     if (
       !gameStarted &&
@@ -182,9 +182,9 @@ canvas.addEventListener("mousedown", (e) => {
   });
 });
 
-// Evento de liberação do clique do mouse nos botões do menu
-canvas.addEventListener("mouseup", (e) => {
-  const { offsetX, offsetY } = e;
+// Evento de liberação do clique/toque nos botões do menu
+canvas.addEventListener("pointerup", (e) => {
+  const { x: offsetX, y: offsetY } = getCanvasPointerPosition(e);
   buttons.forEach((button) => {
     if (
       !gameStarted &&
@@ -206,6 +206,7 @@ canvas.addEventListener("mouseup", (e) => {
           gameStarted = true; // Inicia o jogo após um pequeno atraso
           canvas.style.display = "block";
           canvas.classList.add("active");
+          touchControls.classList.add("visible");
           drawMenu();
           startTime();
         }, 300);
@@ -216,10 +217,12 @@ canvas.addEventListener("mouseup", (e) => {
         button.y -= 5;
         canvas.style.display = "none"; // Esconde o canvas do jogo
         canvas.classList.add("disabled");
+        touchControls.classList.remove("visible");
         playPrompt.style.display = "flex";
         overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
         main.style.height = "100vh";
         main.style.overflow = "auto";
+        document.body.classList.remove("game-active");
         music.pause(); // Pausa a música de fundo, se houver
         music.currentTime = 0;
       }

@@ -47,6 +47,20 @@ function getElapsedTime() {
 }
 
 
+// Converte a posição de um evento de ponteiro (mouse/touch/caneta) para o
+// espaço de coordenadas interno do canvas, já que em telas menores o canvas
+// é exibido em um tamanho (CSS) menor que sua resolução real (1024x576)
+function getCanvasPointerPosition(e) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+
+  return {
+    x: (e.clientX - rect.left) * scaleX,
+    y: (e.clientY - rect.top) * scaleY,
+  };
+}
+
 // Função para verificar colisão entre dois objetos
 function collision({ object1, object2 }) {
   return (
