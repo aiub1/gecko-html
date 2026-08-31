@@ -23,6 +23,17 @@ body {
   overflow: hidden;
 }
 
+/* Trava o scroll/bounce da página enquanto o jogo está ativo (necessário além
+   do overflow:hidden porque no Safari/iOS o "rubber-band" ainda arrasta a
+   página inteira em gestos de toque, mesmo com overflow:hidden) */
+body.game-active {
+  touch-action: none;
+  overscroll-behavior: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+}
+
 body::before {
   content: "";
   position: absolute;
@@ -77,6 +88,10 @@ body::before {
   display: flex;
   justify-content: center;
   gap: 120px;
+}
+
+.hamburguer {
+  display: none;
 }
 
 .navbar__link {
@@ -157,9 +172,72 @@ main {
   z-index: 2;
 }
 
+.canvas-container {
+  width: 100%;
+  max-width: 1024px;
+  display: flex;
+  justify-content: center;
+}
+
 canvas {
   margin-top: 50px;
   display: none;
+  width: 100%;
+  max-width: 1024px;
+  height: auto;
+  touch-action: none;
+}
+
+/* CONTROLES DE TOQUE (mobile) */
+.touch-controls {
+  display: none;
+  width: 100%;
+  max-width: 1024px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  gap: 16px;
+}
+
+.touch-controls__group {
+  display: flex;
+  gap: 14px;
+}
+
+.touch-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+.touch-btn:active {
+  background: rgba(255, 157, 0, 0.6);
+  border-color: var(--accent-color);
+}
+
+.touch-btn--jump {
+  width: 76px;
+  height: 76px;
+  font-size: 28px;
+}
+
+/* Só exibe os controles de toque em dispositivos sem mouse/hover (mobile/tablet) */
+@media (hover: none) and (pointer: coarse) {
+  .touch-controls.visible {
+    display: flex;
+  }
 }
 
 .playBtn {
@@ -349,20 +427,47 @@ strong {
 }
 
 @media (max-width: 768px) {
-  .navbar-top__list {
-    flex-direction: column;
-    gap: 20px;
-    height: auto;
+  .navbar-top {
+    justify-content: space-between;
+    height: 70px;
+    padding: 0 20px;
   }
 
-  .navbar-top {
-    height: auto;
-    padding: 10px 0;
-    margin-bottom: auto;
+  .hamburguer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: white;
+    cursor: pointer;
+    z-index: 6;
+  }
+
+  .navbar-top__list {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    background: black;
+    transition: max-height 0.3s ease-in-out;
+  }
+
+  .navbar-top__list.active {
+    max-height: 300px;
+  }
+
+  .navbar-top__item {
+    width: 100%;
+    padding: 18px 0;
+    text-align: center;
   }
 
   main {
-    margin-top: 200px;
+    margin-top: 70px;
   }
 
   .about {

@@ -17,7 +17,7 @@ const scrollToElem = (element, position) => {
 };
 
 // Exibe o canvas, inicializa a música e atualiza o estilo do HTML
-playBtn.addEventListener("click", () => { 
+playBtn.addEventListener("click", () => {
   window.scrollToElem = (playBtn, "start");
   playPrompt.style.display = "none";
   canvas.style.display = "block";
@@ -25,6 +25,7 @@ playBtn.addEventListener("click", () => {
   overlay.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
   main.style.height = "100%";
   main.style.overflow = "hidden";
+  document.body.classList.add("game-active");
   winningScreen.innerHTML = "";
   winningScreen.style.display = "none";
   music.play();
@@ -34,8 +35,30 @@ playBtn.addEventListener("click", () => {
 navButtons.forEach((button) => {
   const name = button.getAttribute("name");
   const scrollTo = document.getElementById(name);
-  button.addEventListener("click", () => scrollToElem(scrollTo, "center"));
+  button.addEventListener("click", () => {
+    scrollToElem(scrollTo, "center");
+    closeMobileMenu();
+  });
 });
+
+/////////////// MENU HAMBÚRGUER (mobile) /////////////
+
+// Alterna a exibição do menu de navegação em telas mobile
+function toggleMobileMenu() {
+  const isOpen = navList.classList.toggle("active");
+  navToggle.setAttribute("aria-expanded", isOpen);
+  navToggleIcon.classList.toggle("fa-bars", !isOpen);
+  navToggleIcon.classList.toggle("fa-xmark", isOpen);
+}
+
+function closeMobileMenu() {
+  navList.classList.remove("active");
+  navToggle.setAttribute("aria-expanded", "false");
+  navToggleIcon.classList.add("fa-bars");
+  navToggleIcon.classList.remove("fa-xmark");
+}
+
+navToggle.addEventListener("click", toggleMobileMenu);
 
 /////////////// CONFIGURAÇÃO DO CANVAS /////////////
 
@@ -257,10 +280,12 @@ function gameReset() {
 
     canvas.style.display = "none"; // Esconde o canvas do jogo
     canvas.classList.add("disabled");
+    touchControls.classList.remove("visible");
     playPrompt.style.display = "flex";
     overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
     main.style.height = "100vh";
     main.style.overflow = "auto";
+    document.body.classList.remove("game-active");
     music.pause(); // Pausa a música de fundo, se houver
     music.currentTime = 0;
 
@@ -454,54 +479,130 @@ function jumpCoreMechanic() {
 
 ///////////////////////// COMANDOS / MANIPULADORES DE TECLAS ///////////////////////////
 
+// Funções que traduzem uma "intenção" de comando (tecla ou botão de toque)
+// em mudanças no estado de `keys`, para serem reaproveitadas tanto pelo
+// teclado quanto pelos controles de toque em telas mobile.
+function handleLeftDown() {
+  if (!player.playerHasJumped && player.floorCollisionDetected) {
+    keys.KeyA.pressed = true;
+    keys.KeyW.lastPressed = false;
+    keys.KeyA.lastPressed = true;
+    keys.KeyD.lastPressed = false;
+  }
+}
+
+function handleLeftUp() {
+  keys.KeyA.pressed = false;
+  if (player.velocity.y >= 0) player.velocity.x = 0;
+}
+
+function handleRightDown() {
+  if (!player.playerHasJumped && player.floorCollisionDetected) {
+    keys.KeyD.pressed = true;
+    keys.KeyW.lastPressed = false;
+    keys.KeyD.lastPressed = true;
+    keys.KeyA.lastPressed = false;
+  }
+}
+
+function handleRightUp() {
+  keys.KeyD.pressed = false;
+  if (player.velocity.y >= 0) player.velocity.x = 0;
+}
+
+function handleUpDown() {
+  if (!player.playerHasJumped && player.floorCollisionDetected) {
+    keys.KeyW.lastPressed = true;
+    keys.KeyA.pressed = false;
+    keys.KeyD.pressed = false;
+  }
+}
+
+function handleJumpDown() {
+  if (!player.playerHasJumped && player.floorCollisionDetected) {
+    if (player.velocity.y === 0 && !counting) {
+      player.velocity.x = 0;
+      keys.KeyA.pressed = false;
+      keys.KeyD.pressed = false;
+      keys.Space.pressed = true;
+      counting = true;
+      increaseIntensity();
+      intensityBar.color = "rgb(0, 255,0)";
+    }
+  }
+}
+
+function handleJumpUp() {
+  keys.Space.pressed = false;
+  jumpCoreMechanic();
+  intensity = 0;
+}
+
 window.addEventListener("keydown", (event) => {
-  if (!player.playerHasJumped)
-    if (player.floorCollisionDetected)
-      switch (event.code) {
-        case "KeyA":
-          keys.KeyA.pressed = true;
-          keys.KeyW.lastPressed = false;
-          keys.KeyA.lastPressed = true;
-          keys.KeyD.lastPressed = false;
-          break;
-        case "KeyD":
-          keys.KeyD.pressed = true;
-          keys.KeyW.lastPressed = false;
-          keys.KeyD.lastPressed = true;
-          keys.KeyA.lastPressed = false;
-          break;
-        case "KeyW":
-          keys.KeyW.lastPressed = true;
-          keys.KeyA.pressed = false;
-          keys.KeyD.pressed = false;
-          break;
-        case "Space":
-          if (player.velocity.y === 0 && !counting) {
-            player.velocity.x = 0;
-            keys.KeyA.pressed = false;
-            keys.KeyD.pressed = false;
-            keys.Space.pressed = true;
-            counting = true;
-            increaseIntensity();
-            intensityBar.color = "rgb(0, 255,0)";
-          }
-          break;
-      }
+  switch (event.code) {
+    case "KeyA":
+      handleLeftDown();
+      break;
+    case "KeyD":
+      handleRightDown();
+      break;
+    case "KeyW":
+      handleUpDown();
+      break;
+    case "Space":
+      handleJumpDown();
+      break;
+  }
 });
 
 window.addEventListener("keyup", (event) => {
   switch (event.code) {
     case "KeyA":
-      keys.KeyA.pressed = false;
-      if (player.velocity.y >= 0) player.velocity.x = 0;
+      handleLeftUp();
       break;
     case "KeyD":
-      keys.KeyD.pressed = false;
-      if (player.velocity.y >= 0) player.velocity.x = 0;
+      handleRightUp();
       break;
     case "Space":
-      keys.Space.pressed = false;
-      jumpCoreMechanic();
-      intensity = 0;
+      handleJumpUp();
   }
 });
+
+/////////////////////// CONTROLES DE TOQUE (mobile) /////////////////////////
+
+// Liga um botão on-screen a callbacks de "pressionar"/"soltar", usando
+// Pointer Events (funciona para touch, mouse e caneta de forma unificada).
+function bindTouchButton(button, onDown, onUp) {
+  let activePointerId = null;
+
+  function handleDown(event) {
+    if (activePointerId !== null) return;
+    event.preventDefault();
+    activePointerId = event.pointerId;
+    try {
+      button.setPointerCapture(activePointerId);
+    } catch (err) {
+      // Alguns navegadores mobile falham silenciosamente ao capturar o ponteiro
+    }
+    onDown();
+  }
+
+  function handleUp(event) {
+    if (event.pointerId !== activePointerId) return;
+    activePointerId = null;
+    onUp();
+  }
+
+  button.addEventListener("pointerdown", handleDown);
+  button.addEventListener("pointerup", handleUp);
+  button.addEventListener("pointercancel", handleUp);
+  // Fallback na janela: em alguns navegadores mobile (ex: Safari/iOS), o
+  // pointerup não é entregue de volta ao elemento que capturou o ponteiro,
+  // o que travava o botão pressionado indefinidamente
+  window.addEventListener("pointerup", handleUp);
+  window.addEventListener("pointercancel", handleUp);
+}
+
+bindTouchButton(btnLeft, handleLeftDown, handleLeftUp);
+bindTouchButton(btnRight, handleRightDown, handleRightUp);
+bindTouchButton(btnJump, handleJumpDown, handleJumpUp);
